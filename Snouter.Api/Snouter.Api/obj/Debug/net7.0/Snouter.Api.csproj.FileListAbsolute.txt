@@ -35,3 +35,9 @@ C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Ap
 C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\obj\Debug\net7.0\Snouter.Api.pdb
 C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\obj\Debug\net7.0\Snouter.Api.genruntimeconfig.cache
 C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\obj\Debug\net7.0\ref\Snouter.Api.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Dapper.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Npgsql.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
