@@ -24,6 +24,22 @@ namespace Snouter.Api.Mapping
             };
         }
 
+        public static Product MapToProduct(this UpdateProductRequest request, Guid id)
+        {
+            return new Product
+            {
+                Id = id,
+                Title = request.Title,
+                IsSold = request.IsSold,
+                PriceInCents = request.PriceInCents,
+                Category = request.Category,
+                SubCategory = request.SubCategory,
+                Images = request.Images,
+                Location = request.Location,
+                Properties = request.Properties,
+            };
+        }
+
         public static ProductResponse MapToResponse(this Product product)
         {
             return new ProductResponse

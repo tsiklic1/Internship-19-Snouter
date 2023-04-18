@@ -32,7 +32,7 @@ namespace Snouter.Api.Controllers
 
             var response = product.MapToResponse();
 
-            return Ok(response);
+            return CreatedAtAction(nameof(Get), new {id = response.Id}, response);
         }
 
         [HttpGet]
@@ -41,14 +41,14 @@ namespace Snouter.Api.Controllers
         {
             var products = await _productRepository.GetAllAsync();
 
-            var response = products.MapToResponse(products);
+            var response = products.MapToResponse();
 
             return Ok(response);
         }
 
         [HttpGet]
         [Route(ApiEndpoints.Product.Get)]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        public async Task<IActionResult> Get([FromRoute] Guid id)
         {
             var product = await _productRepository.GetByIdAsync(id);
 
@@ -60,6 +60,23 @@ namespace Snouter.Api.Controllers
             var response = product.MapToResponse();
 
             return Ok(response);
+        }
+
+        [HttpPut]
+        [Route(ApiEndpoints.Product.Update)]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateProductRequest request)
+        {
+            var product = request.MapToProduct(id);
+            var isUpdated = await _productRepository.UpdateAsync(product);
+
+            if (!isUpdated)
+            {
+                return NotFound();
+            }
+
+            var response = product.MapToResponse();
+            return Ok(response);
+
         }
 
     }

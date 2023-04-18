@@ -3,6 +3,7 @@
     public class UpdateProductRequest
     {
 
+
         public string Title { get; set; }
         public bool IsSold { get; set; } = false;
         public int PriceInCents { get; set; }
