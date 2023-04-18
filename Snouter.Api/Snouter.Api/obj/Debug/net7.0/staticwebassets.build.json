@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "SqiTj0UBJaS9hDBIKDFRbzDstUSs6OAFLQnc5KhMbrE=",
+  "Source": "Snouter.Api",
+  "BasePath": "_content/Snouter.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
