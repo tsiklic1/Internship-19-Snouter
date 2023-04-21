@@ -18,7 +18,6 @@ namespace Snouter.Api.Mapping
                 Category = request.Category,
                 SubCategory = request.SubCategory,
                 Images = request.Images,
-                Location = request.Location,
                 Properties = request.Properties,
 
             };
@@ -35,7 +34,6 @@ namespace Snouter.Api.Mapping
                 Category = request.Category,
                 SubCategory = request.SubCategory,
                 Images = request.Images,
-                Location = request.Location,
                 Properties = request.Properties,
             };
         }
@@ -51,7 +49,6 @@ namespace Snouter.Api.Mapping
                 Category = product.Category,
                 SubCategory = product.SubCategory,
                 Images = product.Images,
-                Location = product.Location,
                 Properties = product.Properties,
             };
         }
@@ -61,6 +58,40 @@ namespace Snouter.Api.Mapping
             return new ProductsResponse
             {
                 Products = products.Select(MapToResponse)
+            };
+        }
+
+        public static Category MapToCategory(this CreateCategoryRequest request) {
+            return new Category
+            {
+                Id = Guid.NewGuid(),
+                Title = request.Title,
+            };
+        }
+
+        public static Category MapToCategory(this UpdateCategoryRequest request, Guid id)
+        {
+            return new Category
+            {
+                Id = id,
+                Title = request.Title,
+            };
+        }
+
+        public static CategoryResponse MapToResponse(this Category category)
+        {
+            return new CategoryResponse
+            {
+                Id = category.Id,
+                Title = category.Title
+            };
+        }
+
+        public static CategoriesResponse MapToResponse(this IEnumerable<Category> categories)
+        {
+            return new CategoriesResponse
+            {
+                Categories = categories.Select(MapToResponse)
             };
         }
 

@@ -1,11 +1,14 @@
 ﻿
+using Blog.Application.Database;
 using Snouter.Application.Models;
 
 namespace Snouter.Application.Repository
 {
     public class ProductRepository : IProductRepository
     {
-        private List<Product> _products = new List<Product>(); 
+        private List<Product> _products = new List<Product>();
+
+        //private readonly IDbConnectionFactory _dbConnectionFactory;
 
         Task<bool> IProductRepository.CreateAsync(Product product)
         {
@@ -58,7 +61,6 @@ namespace Snouter.Application.Repository
             tempProduct.Category = product.Category;
             tempProduct.SubCategory = product.SubCategory;
             tempProduct.Images= product.Images;
-            tempProduct.Location = product.Location;
             tempProduct.Properties= product.Properties;
 
             return Task.FromResult(true);

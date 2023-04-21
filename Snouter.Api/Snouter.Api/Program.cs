@@ -1,3 +1,4 @@
+using Blog.Application.Database;
 using Snouter.Application;
 
 
@@ -27,5 +28,9 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+var dbInitializer = app.Services.GetRequiredService<DbInitializer>();
+await dbInitializer.InitializeAsync();
+
 
 app.Run();

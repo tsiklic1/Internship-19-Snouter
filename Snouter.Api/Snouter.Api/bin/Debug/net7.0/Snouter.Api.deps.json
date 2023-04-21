@@ -188,6 +188,7 @@
       "Snouter.Application/1.0.0": {
         "dependencies": {
           "Dapper": "2.0.123",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0",
           "Npgsql": "7.0.2",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.3"
         },

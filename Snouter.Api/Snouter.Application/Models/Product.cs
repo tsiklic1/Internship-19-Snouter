@@ -11,7 +11,6 @@ namespace Snouter.Application.Models
         public string Category { get; set; }
         public string SubCategory { get; set; }
         public List<string> Images { get; set; } = new List<string>();
-        public string Location { get; set; }
         public Dictionary<string, string> Properties { get; set;} = new Dictionary<string, string>();
     }
 }

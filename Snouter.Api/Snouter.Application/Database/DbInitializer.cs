@@ -16,50 +16,58 @@ public class DbInitializer
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
 
         await connection.ExecuteAsync(@"
-create table if not exists categories(
-	id SERIAL primary key,
-	category VARCHAR not null
-); 
+create table if not exists users(
+	id uuid primary key,
+	name varchar not null,
+	password varchar not null,
+	isadmin bool not null
+);
 ");
 
+        await connection.ExecuteAsync(@"
+create table if not exists categories(
+	id uuid primary key,
+	title varchar not null
+);
+");
+        await connection.ExecuteAsync(@"
+create table if not exists subcategories(
+	id uuid primary key,
+	title varchar not null,
+	categoryid uuid references categories (id)
+);
+");
         await connection.ExecuteAsync(@"
 create table if not exists specs(
-	id SERIAL primary key,
-	spec VARCHAR not null
+	id uuid primary key,
+	title varchar not null,
+	categoryid uuid references categories (id)
 );
 ");
-
-
-
         await connection.ExecuteAsync(@"
-create table if not exists products (
-    id UUID primary key,
-    title TEXT not null,
-    issold BOOL not null,
-    priceincents INT not null,
-    category INT references categories,
-    subcategory TEXT,
-    images TEXT,
-    location TEXT,
-            
+create table if not exists products(
+	id uuid primary key,
+	title varchar not null,
+	issold bool not null,
+	priceincents uuid not null,
+	categoryid uuid references categories (id),
+	subcategoryid uuid references subcategories (id),
+	sellerid uuid references users (id)
 );
 ");
-
         await connection.ExecuteAsync(@"
-create table if not exists categoriesspecs(
-	id serial primary key,
-	categoryid int references categories,
-	specid int references specs
+create table if not exists images(
+	id uuid primary key,
+	src varchar not null,
+	productid uuid references products (id)
 );
-
 ");
-
         await connection.ExecuteAsync(@"
 create table if not exists productsspecs(
-	id serial primary key,
-	productid UUID references products,
-	specId int references categoriesspecs,
-	specinfo TEXT not null
+	id uuid primary key,
+	productid uuid references products (id),
+	specid uuid references specs (id),
+	specinfo varchar not null
 );
 ");
     }
