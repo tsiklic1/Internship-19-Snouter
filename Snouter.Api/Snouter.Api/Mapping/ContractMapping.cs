@@ -44,7 +44,7 @@ namespace Snouter.Api.Mapping
         {
             return new ProductResponse
             {
-                Id = Guid.NewGuid(),
+                Id = product.Id,
                 Title = product.Title,
                 IsSold = product.IsSold,
                 PriceInCents = product.PriceInCents,

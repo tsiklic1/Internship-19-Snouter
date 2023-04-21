@@ -700,6 +700,7 @@
   "projectFileDependencyGroups": {
     "net7.0": [
       "Dapper >= 2.0.123",
+      "Microsoft.Extensions.DependencyInjection.Abstractions >= 7.0.0",
       "Npgsql >= 7.0.2",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 7.0.3"
     ]
@@ -746,6 +747,10 @@
           "Dapper": {
             "target": "Package",
             "version": "[2.0.123, )"
+          },
+          "Microsoft.Extensions.DependencyInjection.Abstractions": {
+            "target": "Package",
+            "version": "[7.0.0, )"
           },
           "Npgsql": {
             "target": "Package",

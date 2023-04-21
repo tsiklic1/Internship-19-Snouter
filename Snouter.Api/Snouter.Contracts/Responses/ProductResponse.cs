@@ -2,7 +2,7 @@
 {
     public class ProductResponse
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         public string Title { get; set; }
         public bool IsSold { get; set; } = false;
         public int PriceInCents { get; set; }

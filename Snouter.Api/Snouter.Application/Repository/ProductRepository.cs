@@ -38,7 +38,7 @@ namespace Snouter.Application.Repository
 
         Task<Product?> IProductRepository.GetByIdAsync(Guid id)
         {
-            var tempProduct = _products.SingleOrDefault(x => x.Id == id);
+            var tempProduct = _products.FirstOrDefault(x => x.Id == id);
             return Task.FromResult(tempProduct);
         }
 
