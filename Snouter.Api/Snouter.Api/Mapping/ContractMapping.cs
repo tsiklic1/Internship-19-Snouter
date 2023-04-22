@@ -102,10 +102,7 @@ namespace Snouter.Api.Mapping
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
-                Category = new Category{
-                    Id = request.CategoryId,
-                    //Title = request.Title,
-                }
+                CategoryId = request.CategoryId
             };
         }
 
@@ -117,7 +114,7 @@ namespace Snouter.Api.Mapping
             {
                 Id = subcategory.Id,
                 Title = subcategory.Title,
-                CategoryId = subcategory.Category.Id
+                CategoryId = subcategory.CategoryId
             };
         }
 

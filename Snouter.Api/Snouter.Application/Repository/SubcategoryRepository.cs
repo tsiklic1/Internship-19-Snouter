@@ -13,12 +13,12 @@ namespace Snouter.Application.Repository
     public class SubcategoryRepository : ISubcategoryRepository
     {
         private readonly IDbConnectionFactory _dbConnectionFactory;
-        private readonly CategoryRepository _categoryRepository;
+        //private readonly ICategoryRepository _categoryRepository;
 
         public SubcategoryRepository(IDbConnectionFactory dbConnectionFactory)
         {
             _dbConnectionFactory = dbConnectionFactory;
-            _categoryRepository = new CategoryRepository(_dbConnectionFactory);
+            //_categoryRepository = categoryRepository;
         }
         public async Task<bool> CreateAsync(Subcategory subcategory)
         {

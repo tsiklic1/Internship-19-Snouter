@@ -12,16 +12,24 @@ namespace Snouter.Application.Services
     {
         private readonly ISubcategoryRepository _subcategoryRepository;
 
-        private readonly CategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public SubcategoryService(ISubcategoryRepository subcategoryRepository)
+        public SubcategoryService(ISubcategoryRepository subcategoryRepository, ICategoryRepository categoryRepository)
         {
             _subcategoryRepository = subcategoryRepository;
+            _categoryRepository = categoryRepository;
 
         }
         public Task<bool> CreateAsync(Subcategory subcategory)
         {
+            //var categoryExists = await _categoryRepository.ExistsByIdAsync(subcategory.Id);
+            //if (!categoryExists)
+            //{
+            //    return false;
+            //}
+
             return _subcategoryRepository.CreateAsync(subcategory);
+            //return true;
         }
 
         public Task<bool> DeleteAsync(Guid id)

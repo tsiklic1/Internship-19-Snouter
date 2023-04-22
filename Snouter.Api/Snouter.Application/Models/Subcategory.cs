@@ -12,6 +12,8 @@ namespace Snouter.Application.Models
 
         public string Title { get; set; }
 
+        public Guid CategoryId { get; init; }
+
         public Category Category { get; set; }
     }
 }
