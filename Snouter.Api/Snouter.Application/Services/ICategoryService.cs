@@ -5,17 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Snouter.Application.Repository
+namespace Snouter.Application.Services
 {
-    public interface ICategoryRepository
+    public interface ICategoryService
     {
         Task<bool> CreateAsync(Category category);
         Task<Category?> GetByIdAsync(Guid id);
         Task<IEnumerable<Category>> GetAllAsync();
 
-        //Task<bool> UpdateAsync(Category category);
-        Task<bool> DeleteAsync(Guid id);
+        //Task<Category?> UpdateAsync(Category category);
+        Task<Category?> DeleteAsync(Guid id);
 
-        Task<bool> ExistsByIdAsync(Guid id);
     }
 }

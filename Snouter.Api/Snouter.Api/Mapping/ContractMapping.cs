@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Snouter.Api.Controllers;
 using Snouter.Application.Models;
 using Snouter.Contracts.Requests;
 using Snouter.Contracts.Responses;
@@ -95,5 +96,37 @@ namespace Snouter.Api.Mapping
             };
         }
 
+        public static Subcategory MapToSubcategory(this CreateSubcategoryRequest request)
+        {
+            return new Subcategory
+            {
+                Id = Guid.NewGuid(),
+                Title = request.Title,
+                Category = new Category{
+                    Id = request.CategoryId,
+                    //Title = request.Title,
+                }
+            };
+        }
+
+        //update mapping not implemented
+
+        public static SubcategoryResponse MapToResponse(this Subcategory subcategory)
+        {
+            return new SubcategoryResponse
+            {
+                Id = subcategory.Id,
+                Title = subcategory.Title,
+                CategoryId = subcategory.Category.Id
+            };
+        }
+
+        public static SubcategoriesResponse MapToResponse(this IEnumerable<Subcategory> subcategories)
+        {
+            return new SubcategoriesResponse
+            {
+                Subcategories = subcategories.Select(MapToResponse)
+            };
+        }
     }
 }

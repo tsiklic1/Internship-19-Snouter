@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Snouter.Application.Repository
 {
-    public interface ICategoryRepository
+    public interface ISubcategoryRepository
     {
-        Task<bool> CreateAsync(Category category);
-        Task<Category?> GetByIdAsync(Guid id);
-        Task<IEnumerable<Category>> GetAllAsync();
+        Task<bool> CreateAsync(Subcategory subcategory);
+        Task<Subcategory?> GetByIdAsync(Guid id);
+        Task<IEnumerable<Subcategory>> GetAllAsync();
 
         //Task<bool> UpdateAsync(Category category);
         Task<bool> DeleteAsync(Guid id);

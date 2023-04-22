@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Snouter.Api.Mapping;
 using Snouter.Application.Repository;
+using Snouter.Application.Services;
 using Snouter.Contracts.Requests;
 
 namespace Snouter.Api.Controllers
@@ -8,11 +9,12 @@ namespace Snouter.Api.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ICategoryRepository _categoryRepository;
+        //private readonly ICategoryRepository _categoryRepository;
 
-        public CategoriesController(ICategoryRepository categoryRepository)
+        private readonly ICategoryService _categoryService;
+        public CategoriesController(ICategoryService categoryService)
         {
-            _categoryRepository= categoryRepository;
+            _categoryService= categoryService;
         }
 
         [HttpPost]
@@ -21,12 +23,14 @@ namespace Snouter.Api.Controllers
         {
             var category = request.MapToCategory();
 
-            var isCreated = _categoryRepository.CreateAsync(category).Result;
+            //var isCreated = _categoryService.CreateAsync(category).Result;
 
-            if (!isCreated)
-            {
-                return BadRequest();
-            }
+            await _categoryService.CreateAsync(category);
+
+            //if (!isCreated)
+            //{
+            //    return BadRequest();
+            //}
 
             var response = category.MapToResponse();
 
@@ -37,7 +41,7 @@ namespace Snouter.Api.Controllers
         [Route(ApiEndpoints.Category.GetAll)]
         public async Task<IActionResult> GetAll() 
         {
-            var categories = await _categoryRepository.GetAllAsync();
+            var categories = await _categoryService.GetAllAsync();
 
             var response = categories.MapToResponse();
 
@@ -48,7 +52,7 @@ namespace Snouter.Api.Controllers
         [Route(ApiEndpoints.Category.Get)]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
-            var category = await _categoryRepository.GetByIdAsync(id);
+            var category = await _categoryService.GetByIdAsync(id);
 
             if (category is null)
             {
@@ -60,21 +64,21 @@ namespace Snouter.Api.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
-        [Route(ApiEndpoints.Category.Update)]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCategoryRequest request)
-        {
-            var category = request.MapToCategory(id);
-            var isUpdated = await _categoryRepository.UpdateAsync(category);
+        //[HttpPut]
+        //[Route(ApiEndpoints.Category.Update)]
+        //public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCategoryRequest request)
+        //{
+        //    var category = request.MapToCategory(id);
+        //    var isUpdated = await _categoryService.UpdateAsync(category);
 
-            if (!isUpdated)
-            {
-                return NotFound();
-            }
+        //    if (!isUpdated)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var response = category.MapToResponse();
-            return Ok(response);
+        //    var response = category.MapToResponse();
+        //    return Ok(response);
 
-        }
+        //}
     }
 }

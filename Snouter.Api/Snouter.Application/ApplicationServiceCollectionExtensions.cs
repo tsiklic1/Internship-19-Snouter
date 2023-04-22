@@ -3,6 +3,7 @@
 using Blog.Application.Database;
 using Microsoft.Extensions.DependencyInjection;
 using Snouter.Application.Repository;
+using Snouter.Application.Services;
 
 namespace Snouter.Application
 {
@@ -12,7 +13,9 @@ namespace Snouter.Application
         {
             services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
-            //services.AddSingleton<IPostService, PostService>(); product 
+            services.AddSingleton<ICategoryService, CategoryService>();
+            services.AddSingleton<ISubcategoryRepository, SubcategoryRepository>();
+            services.AddSingleton<ISubcategoryService, SubcategoryService>();
 
             return services;
         }

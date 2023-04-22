@@ -19,5 +19,14 @@
             public const string GetAll = Base;
             public const string Update = $"{Base}/{{id:guid}}";
         }
+
+        public static class Subcategory
+        {
+            private const string Base = $"{ApiBase}/subcategories";
+            public const string Create = Base;
+            public const string Get = $"{Base}/{{id:guid}}";
+            public const string GetAll = Base;
+            public const string Update = $"{Base}/{{id:guid}}";
+        }
     }
 }
