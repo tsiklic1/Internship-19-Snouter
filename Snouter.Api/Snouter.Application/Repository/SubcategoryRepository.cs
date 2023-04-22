@@ -24,17 +24,17 @@ namespace Snouter.Application.Repository
         {
             using var connection = await _dbConnectionFactory.CreateConnectionAsync();
             using var transaction = connection.BeginTransaction();
-            var categoryExists = await _categoryRepository.ExistsByIdAsync(subcategory.Id);
+            //var categoryExists = await _categoryRepository.ExistsByIdAsync(subcategory.Id);
 
-            if (!categoryExists)
-            {
-                return false;
-            }
+            //if (!categoryExists)
+            //{
+            //    return false;
+            //}
 
 
             var result = await connection.ExecuteAsync(new CommandDefinition(@"
                     insert into subcategories (id, title, categoryid)
-                    values (@Id, @Title, @CategoryId
+                    values (@Id, @Title, @CategoryId)
 ", subcategory));
 
             if (result <= 0)
@@ -95,7 +95,7 @@ namespace Snouter.Application.Repository
             var subcategory = await connection.QuerySingleOrDefaultAsync <Subcategory>(
                 new CommandDefinition(@"
                 select subcategories.id as id, subcategories.title as subtitle,
-                subcategories.categoryid as categoryid
+                subcategories.categoryid as categoryid from subcategories
                 where subcategories.id = @id
 ", new { id }));
 

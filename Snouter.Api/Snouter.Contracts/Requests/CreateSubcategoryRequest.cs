@@ -8,7 +8,7 @@ namespace Snouter.Contracts.Requests
 {
     public class CreateSubcategoryRequest
     {
-        public string Title;
-        public Guid CategoryId;
+        public Guid CategoryId { get; set; }
+        public string Title { get; set; }
     }
 }

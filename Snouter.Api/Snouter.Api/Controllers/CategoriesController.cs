@@ -23,14 +23,8 @@ namespace Snouter.Api.Controllers
         {
             var category = request.MapToCategory();
 
-            //var isCreated = _categoryService.CreateAsync(category).Result;
 
             await _categoryService.CreateAsync(category);
-
-            //if (!isCreated)
-            //{
-            //    return BadRequest();
-            //}
 
             var response = category.MapToResponse();
 

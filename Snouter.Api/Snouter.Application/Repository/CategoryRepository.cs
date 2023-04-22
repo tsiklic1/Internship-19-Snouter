@@ -91,7 +91,7 @@ namespace Snouter.Application.Repository
             using var connection = await _dbConnectionFactory.CreateConnectionAsync();
 
             var category = await connection.QuerySingleOrDefaultAsync<Category>(
-                new CommandDefinition(@"select * from categories where id = @Id", new {id}));
+                new CommandDefinition(@"select * from categories where id = @id", new {id}));
 
             if (category is null) { return null;}
 
