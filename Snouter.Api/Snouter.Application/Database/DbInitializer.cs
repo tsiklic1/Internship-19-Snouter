@@ -15,6 +15,8 @@ public class DbInitializer
     {
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
 
+		await connection.ExecuteAsync("create extension if not exists \"uuid-ossp\"");
+
         await connection.ExecuteAsync(@"
 create table if not exists users(
 	id uuid primary key,
@@ -70,5 +72,11 @@ create table if not exists productsspecs(
 	specinfo varchar not null
 );
 ");
+
+		await connection.ExecuteAsync(@"
+insert into users (id, name, password, isadmin)
+values (uuid_generate_v4(), 'a', 'b', false)
+");
+
     }
 }

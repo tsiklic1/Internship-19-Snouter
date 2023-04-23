@@ -12,6 +12,7 @@ namespace Snouter.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddSingleton<IProductRepository, ProductRepository>();
+            services.AddSingleton<IProductService, ProductService>();
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
             services.AddSingleton<ICategoryService, CategoryService>();
             services.AddSingleton<ISubcategoryRepository, SubcategoryRepository>();

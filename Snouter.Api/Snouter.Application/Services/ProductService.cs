@@ -32,12 +32,12 @@ namespace Snouter.Application.Services
 
         public Task<IEnumerable<Product>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return _productRepository.GetAllAsync();
         }
 
         public Task<Product?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return _productRepository.GetByIdAsync(id);
         }
 
         public Task<Product?> UpdateAsync(Product product)
