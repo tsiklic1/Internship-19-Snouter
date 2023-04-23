@@ -3,6 +3,7 @@ using Snouter.Api.Controllers;
 using Snouter.Application.Models;
 using Snouter.Contracts.Requests;
 using Snouter.Contracts.Responses;
+using System.Net.NetworkInformation;
 
 namespace Snouter.Api.Mapping
 {
@@ -13,31 +14,31 @@ namespace Snouter.Api.Mapping
             return new Product
             {
                 Id = Guid.NewGuid(),
-                Title = request.Title,
-                IsSold = request.IsSold,
-                PriceInCents = request.PriceInCents,
-                Category = request.Category,
-                SubCategory = request.SubCategory,
+                Title= request.Title,
+                IsSold= request.IsSold,
+                PriceInCents= request.PriceInCents,
+                CategoryId= request.CategoryId,
+                SubcategoryId= request.SubcategoryId,
+                SellerId= request.SellerId,
                 Images = request.Images,
-                Properties = request.Properties,
-
+                Specs = request.Specs
             };
         }
 
-        public static Product MapToProduct(this UpdateProductRequest request, Guid id)
-        {
-            return new Product
-            {
-                Id = id,
-                Title = request.Title,
-                IsSold = request.IsSold,
-                PriceInCents = request.PriceInCents,
-                Category = request.Category,
-                SubCategory = request.SubCategory,
-                Images = request.Images,
-                Properties = request.Properties,
-            };
-        }
+        //public static Product MapToProduct(this UpdateProductRequest request, Guid id)
+        //{
+        //    return new Product
+        //    {
+        //        Id = id,
+        //        Title = request.Title,
+        //        IsSold = request.IsSold,
+        //        PriceInCents = request.PriceInCents,
+        //        Category = request.Category,
+        //        SubCategory = request.SubCategory,
+        //        Images = request.Images,
+        //        Properties = request.Properties,
+        //    };
+        //}
 
         public static ProductResponse MapToResponse(this Product product)
         {
@@ -47,10 +48,11 @@ namespace Snouter.Api.Mapping
                 Title = product.Title,
                 IsSold = product.IsSold,
                 PriceInCents = product.PriceInCents,
-                Category = product.Category,
-                SubCategory = product.SubCategory,
+                CategoryId = product.CategoryId,
+                SubcategoryId = product.SubcategoryId,
+                SellerId= product.SellerId,
                 Images = product.Images,
-                Properties = product.Properties,
+                Specs = product.Specs
             };
         }
 
@@ -105,7 +107,7 @@ namespace Snouter.Api.Mapping
                 CategoryId = request.CategoryId
             };
         }
-
+        
         //update mapping not implemented
 
         public static SubcategoryResponse MapToResponse(this Subcategory subcategory)
@@ -123,6 +125,63 @@ namespace Snouter.Api.Mapping
             return new SubcategoriesResponse
             {
                 Subcategories = subcategories.Select(MapToResponse)
+            };
+        }
+
+        public static User MapToUser(this CreateUserRequest request) 
+        {
+            return new User
+            {
+                Id = Guid.NewGuid(),
+                Name = request.Name,
+                Password = request.Password,
+                IsAdmin = request.IsAdmin
+            };
+        }
+
+        public static UserResponse MapToResponse(this User user)
+        {
+            return new UserResponse
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Password = user.Password,
+                IsAdmin = user.IsAdmin
+            };
+        }
+
+        public static UsersResponse MapToResponse(this IEnumerable<User> users)
+        {
+            return new UsersResponse
+            {
+                Users = users.Select(MapToResponse)
+            };
+        }
+        public static Spec MapToSpec(this CreateSpecRequest request)
+        {
+            return new Spec
+            {
+                Id = Guid.NewGuid(),
+                Title = request.Title,
+                CategoryId = request.CategoryId
+            };
+        } 
+
+        public static SpecResponse MapToResponse(this Spec spec)
+        {
+            return new SpecResponse
+            {
+                Id = spec.Id,
+                Title = spec.Title,
+                CategoryId = spec.CategoryId
+            };
+        }
+
+        public static SpecsResponse MapToResponse(this IEnumerable<Spec> specs)
+        {
+            return new SpecsResponse
+            {
+                Specs = specs.Select(MapToResponse)
             };
         }
     }

@@ -49,7 +49,7 @@ create table if not exists products(
 	id uuid primary key,
 	title varchar not null,
 	issold bool not null,
-	priceincents uuid not null,
+	priceincents int not null,
 	categoryid uuid references categories (id),
 	subcategoryid uuid references subcategories (id),
 	sellerid uuid references users (id)

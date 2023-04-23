@@ -78,6 +78,7 @@ namespace Snouter.Application.Repository
             {
                 Id = x.id,
                 Title = x.subtitle,
+                CategoryId = x.categoryid,
                 Category = new Category
                 {
                     Id = x.categoryid,
@@ -85,7 +86,6 @@ namespace Snouter.Application.Repository
                 }
             }
                 );
-
         }
 
         public async Task<Subcategory?> GetByIdAsync(Guid id)
@@ -94,7 +94,7 @@ namespace Snouter.Application.Repository
 
             var subcategory = await connection.QuerySingleOrDefaultAsync <Subcategory>(
                 new CommandDefinition(@"
-                select subcategories.id as id, subcategories.title as subtitle,
+                select subcategories.id as id, subcategories.title as title,
                 subcategories.categoryid as categoryid from subcategories
                 where subcategories.id = @id
 ", new { id }));
