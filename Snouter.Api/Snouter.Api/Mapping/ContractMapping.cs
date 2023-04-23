@@ -25,22 +25,23 @@ namespace Snouter.Api.Mapping
             };
         }
 
-        //public static Product MapToProduct(this UpdateProductRequest request, Guid id)
-        //{
-        //    return new Product
-        //    {
-        //        Id = id,
-        //        Title = request.Title,
-        //        IsSold = request.IsSold,
-        //        PriceInCents = request.PriceInCents,
-        //        Category = request.Category,
-        //        SubCategory = request.SubCategory,
-        //        Images = request.Images,
-        //        Properties = request.Properties,
-        //    };
-        //}
+        public static Product MapToProduct(this UpdateProductRequest request, Guid id)
+        {
+            return new Product
+            {
+                Id = id,
+                Title = request.Title,
+                IsSold = request.IsSold,
+                PriceInCents = request.PriceInCents,
+                CategoryId = request.CategoryId,
+                SubcategoryId = request.SubcategoryId,
+                SellerId = request.SellerId,
+                Images = request.Images,
+                Specs = request.Specs
+            };
+        }
 
-        public static ProductResponse MapToResponse(this Product product)
+public static ProductResponse MapToResponse(this Product product)
         {
             return new ProductResponse
             {
@@ -107,9 +108,16 @@ namespace Snouter.Api.Mapping
                 CategoryId = request.CategoryId
             };
         }
-        
-        //update mapping not implemented
 
+        public static Subcategory MapToSubcategory(this UpdateSubcategoryRequest request, Guid id)
+        {
+            return new Subcategory
+            {
+                Id = id,
+                Title = request.Title,
+                CategoryId = request.CategoryId
+            };
+        }
         public static SubcategoryResponse MapToResponse(this Subcategory subcategory)
         {
             return new SubcategoryResponse
@@ -133,6 +141,17 @@ namespace Snouter.Api.Mapping
             return new User
             {
                 Id = Guid.NewGuid(),
+                Name = request.Name,
+                Password = request.Password,
+                IsAdmin = request.IsAdmin
+            };
+        }
+
+        public static User MapToUser(this UpdateUserRequest request, Guid id)
+        {
+            return new User
+            {
+                Id = id,
                 Name = request.Name,
                 Password = request.Password,
                 IsAdmin = request.IsAdmin
@@ -165,7 +184,17 @@ namespace Snouter.Api.Mapping
                 Title = request.Title,
                 CategoryId = request.CategoryId
             };
-        } 
+        }
+
+        public static Spec MapToSpec(this UpdateSpecRequest request, Guid id)
+        {
+            return new Spec
+            {
+                Id = id,
+                Title = request.Title,
+                CategoryId = request.CategoryId
+            };
+        }
 
         public static SpecResponse MapToResponse(this Spec spec)
         {

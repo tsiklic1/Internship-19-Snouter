@@ -58,21 +58,21 @@ namespace Snouter.Api.Controllers
             return Ok(response);
         }
 
-        //[HttpPut]
-        //[Route(ApiEndpoints.Category.Update)]
-        //public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCategoryRequest request)
-        //{
-        //    var category = request.MapToCategory(id);
-        //    var isUpdated = await _categoryService.UpdateAsync(category);
+        [HttpPut]
+        [Route(ApiEndpoints.Category.Update)]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCategoryRequest request)
+        {
+            var category = request.MapToCategory(id);
+            var updatedCategory = await _categoryService.UpdateAsync(category);
 
-        //    if (!isUpdated)
-        //    {
-        //        return NotFound();
-        //    }
+            if (updatedCategory is null) 
+            {
+                return NotFound();
+            }
 
-        //    var response = category.MapToResponse();
-        //    return Ok(response);
+            var response = category.MapToResponse();
+            return Ok(response);
 
-        //}
+        }
     }
 }

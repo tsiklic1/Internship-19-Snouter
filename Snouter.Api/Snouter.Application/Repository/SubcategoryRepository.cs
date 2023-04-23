@@ -24,14 +24,6 @@ namespace Snouter.Application.Repository
         {
             using var connection = await _dbConnectionFactory.CreateConnectionAsync();
             using var transaction = connection.BeginTransaction();
-            //var categoryExists = await _categoryRepository.ExistsByIdAsync(subcategory.Id);
-
-            //if (!categoryExists)
-            //{
-            //    return false;
-            //}
-
-
             var result = await connection.ExecuteAsync(new CommandDefinition(@"
                     insert into subcategories (id, title, categoryid)
                     values (@Id, @Title, @CategoryId)
@@ -60,9 +52,12 @@ namespace Snouter.Application.Repository
             return result > 0;
         }
 
-        public Task<bool> ExistsByIdAsync(Guid id)
+        public async Task<bool> ExistsByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition(@"
+            select count(1) from subcategories where id = @Id
+        ", new { Id = id }));
         }
 
         public async Task<IEnumerable<Subcategory>> GetAllAsync()
@@ -109,6 +104,20 @@ namespace Snouter.Application.Repository
 
             return subcategory;
 
+        }
+
+        public async Task<bool> UpdateAsync(Subcategory subcategory)
+        {
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            using var transaction = connection.BeginTransaction();
+
+            var result = await connection.ExecuteAsync(new CommandDefinition(@"
+            update subcategories set title = @Title, categoryid = @CategoryId
+            where id = @Id
+        ", subcategory));
+
+            transaction.Commit();
+            return result > 0;
         }
     }
 }

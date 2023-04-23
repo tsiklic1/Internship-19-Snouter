@@ -39,5 +39,17 @@ namespace Snouter.Application.Services
         {
             return _specRepository.GetByIdAsync(id);
         }
+
+        public async Task<Spec?> UpdateAsync(Spec spec)
+        {
+            var categoryExists = await _categoryRepository.ExistsByIdAsync(spec.CategoryId);
+            if (!categoryExists) { return null; }
+
+            var specExists = await _specRepository.ExistsByIdAsync(spec.Id);
+            if (!specExists) { return null; }
+
+            await _specRepository.UpdateAsync(spec);
+            return spec;
+        }
     }
 }

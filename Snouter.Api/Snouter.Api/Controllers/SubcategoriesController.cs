@@ -55,5 +55,23 @@ namespace Snouter.Api.Controllers
 
             return Ok(response);
         }
+
+
+        [HttpPut]
+        [Route(ApiEndpoints.Subcategory.Update)]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateSubcategoryRequest request)
+        {
+            var subcategory = request.MapToSubcategory(id);
+            var updatedCategory = await _subcategoryService.UpdateAsync(subcategory);
+
+            if (updatedCategory is null)
+            {
+                return NotFound();
+            }
+
+            var response = subcategory.MapToResponse();
+            return Ok(response);
+
+        }
     }
 }

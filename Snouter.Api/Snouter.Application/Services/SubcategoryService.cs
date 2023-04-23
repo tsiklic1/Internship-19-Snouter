@@ -29,7 +29,6 @@ namespace Snouter.Application.Services
             //}
 
             return _subcategoryRepository.CreateAsync(subcategory);
-            //return true;
         }
 
         public Task<bool> DeleteAsync(Guid id)
@@ -45,6 +44,18 @@ namespace Snouter.Application.Services
         public Task<Subcategory?> GetByIdAsync(Guid id)
         {
             return _subcategoryRepository.GetByIdAsync(id);
+        }
+
+        public async Task<Subcategory?> UpdateAsync(Subcategory subcategory)
+        {
+            var categoryExists = await _categoryRepository.ExistsByIdAsync(subcategory.CategoryId);
+            if (!categoryExists) { return null; }
+
+            var subcategoryExists = await _subcategoryRepository.ExistsByIdAsync(subcategory.Id);
+            if (!subcategoryExists) { return null; }
+
+            await _subcategoryRepository.UpdateAsync(subcategory);
+            return subcategory;
         }
     }
 }

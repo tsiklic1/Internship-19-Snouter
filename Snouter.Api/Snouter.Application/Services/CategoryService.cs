@@ -36,9 +36,12 @@ namespace Snouter.Application.Services
             return _categoryRepository.GetByIdAsync(id);
         }
 
-        //public Task<Category?> UpdateAsync(Category category)
-        //{
-            
-        //}
+        public async Task<Category?> UpdateAsync(Category category)
+        {
+            var categoryExists = await _categoryRepository.ExistsByIdAsync(category.Id);
+            if (!categoryExists) { return null; }
+            await _categoryRepository.UpdateAsync(category);
+            return category;
+        }
     }
 }

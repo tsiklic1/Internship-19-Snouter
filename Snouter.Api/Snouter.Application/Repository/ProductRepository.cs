@@ -59,55 +59,55 @@ namespace Snouter.Application.Repository
         {
             using var connection = await _dbConnectionFactory.CreateConnectionAsync();
             var result = await connection.QueryAsync(new CommandDefinition(@"
-            select id, title,
-            issold,priceincents,
-            categoryid, subcategoryid,
-            sellerid from products 
+            SELECT
+              p.id AS product_id,
+              p.title AS product_title,
+              p.issold AS product_issold,
+              p.priceincents AS product_priceincents,
+              c.id AS category_id,
+              s.id AS subcategory_id,
+              u.id AS seller_id,
+              (
+                SELECT string_agg(i.src, ',') 
+                FROM images i 
+                WHERE i.productid = p.id
+              ) AS image_urls,
+              (
+                SELECT string_agg(ps.specid || ':' || ps.specinfo, ',') 
+                FROM productsspecs ps 
+                WHERE ps.productid = p.id
+              ) AS specs_info
+            FROM products p
+            JOIN categories c ON p.categoryid = c.id
+            JOIN subcategories s ON p.subcategoryid = s.id
+            JOIN users u ON p.sellerid = u.id;
             "));
 
-            var productsList = result.Select(x => new Product
+            return result.Select(row => new Product
             {
-                Id = x.id,
-                Title = x.title,
-                IsSold = x.issold,
-                PriceInCents = x.priceincents,
-                CategoryId = x.categoryid,
-                SubcategoryId = x.subcategoryid,
-                SellerId = x.sellerid,
-                Images = new List<string> { },
-                Specs = new Dictionary<Guid, string> { }
-            }); 
-
-            foreach (var product in productsList)
-            {
-                var images = await connection.QueryAsync(new CommandDefinition(@"
-                select images.src as src from images
-                where images.productid = @Id
-", new { Id = product.Id }));
-
-                foreach (var image in images)
-                {
-                    product.Images.Add(image.src);
-                }
-            }
-
-            foreach (var product in productsList)
-            {
-                var specs = await connection.QueryAsync(new CommandDefinition(@"
-                select specid,specinfo
-                from specs join productsspecs on specs.id = productsspecs.specid
-                where productsspecs.productid = @Id
-", new { Id = product.Id }));
-
-                var specsList = specs.Select(x => new { SpecId = x.specid, SpecInfo = x.specinfo });
-
-                foreach (var spec in specsList)
-                {
-                     product.Specs.Add(spec.SpecId, spec.SpecInfo);
-                }
-            }
-
-            return productsList;
+                Id = row.product_id,
+                Title = row.product_title,
+                IsSold = row.product_issold,
+                PriceInCents = row.product_priceincents,
+                CategoryId = row.category_id,
+                SubcategoryId = row.subcategory_id,
+                SellerId = row.seller_id,
+                Images = _ConvertImages(row.image_urls),
+                Specs = _ConvertSpecs(row.specs_info)
+            }) ;
+        }
+        List<String> _ConvertImages(string imagesString)
+        {
+            var result = imagesString != null ? imagesString.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList() : new List<string>();
+            return result;
+        }
+        Dictionary<Guid, string> _ConvertSpecs(string specsString)
+        {
+            var specs = specsString != null ? specsString.Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(specInfo => specInfo.Split(':'))
+            .ToDictionary(specParts => Guid.Parse(specParts[0]), specParts => specParts[1]) : new Dictionary<Guid, string>();
+            
+            return specs;
         }
 
         public async Task<Product?> GetByIdAsync(Guid id)
@@ -119,7 +119,30 @@ namespace Snouter.Application.Repository
 ", new { Id = id }));
 
             if (product is null) { return null; }
+
+            var images = await connection.QueryAsync<string>(new CommandDefinition(@"
+                select src from images where productid = @Id
+", new { Id = id }));
+
+            product.Images = images.ToList();
+
+            var specs = await connection.QueryAsync(new CommandDefinition(@"
+                select specid,specinfo
+                from specs join productsspecs on specs.id = productsspecs.specid
+                where productsspecs.productid = @Id
+", new {Id = product.Id}));
+
+            foreach (var spec in specs)
+            {
+                product.Specs.Add(spec.specid, spec.specinfo);
+            }
+
             return product;
+        }
+
+        public async Task<bool> UpdateAsync(Product product)
+        {
+            throw new NotImplementedException();
         }
 
 

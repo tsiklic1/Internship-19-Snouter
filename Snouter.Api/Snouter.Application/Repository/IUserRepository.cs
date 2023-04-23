@@ -13,7 +13,7 @@ namespace Snouter.Application.Repository
         Task<User?> GetByIdAsync(Guid id);
         Task<IEnumerable<User>> GetAllAsync();
 
-        //Task<bool> UpdateAsync(Category category);
+        Task<bool> UpdateAsync(User user);
         Task<bool> DeleteAsync(Guid id);
 
         Task<bool> ExistsByIdAsync(Guid id);

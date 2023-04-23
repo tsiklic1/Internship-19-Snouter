@@ -46,9 +46,12 @@ namespace Snouter.Application.Repository
             throw new NotImplementedException();
         }
 
-        public Task<bool> ExistsByIdAsync(Guid id)
+        public async Task<bool> ExistsByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition(@"
+            select count(1) from specs where id = @Id
+        ", new { Id = id }));
         }
 
         public async Task<IEnumerable<Spec>> GetAllAsync()
@@ -77,6 +80,20 @@ namespace Snouter.Application.Repository
 
             return spec;
 
+        }
+
+        public async Task<bool> UpdateAsync(Spec spec)
+        {
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            using var transaction = connection.BeginTransaction();
+
+            var result = await connection.ExecuteAsync(new CommandDefinition(@"
+            update specs set title = @Title, categoryid = @CategoryId
+            where id = @Id
+        ", spec));
+
+            transaction.Commit();
+            return result > 0;
         }
     }
 }

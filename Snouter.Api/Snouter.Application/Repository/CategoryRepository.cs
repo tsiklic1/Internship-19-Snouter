@@ -3,6 +3,7 @@ using Dapper;
 using Snouter.Application.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -98,6 +99,20 @@ namespace Snouter.Application.Repository
             return category;
             //var tempCategory = _categories.FirstOrDefault(c => c.Id == id);
             //return Task.FromResult(tempCategory);
+        }
+
+        public async Task<bool> UpdateAsync(Category category)
+        {
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            using var transaction = connection.BeginTransaction();
+
+            var result = await connection.ExecuteAsync(new CommandDefinition(@"
+            update categories set title = @Title
+            where id = @Id
+        ", category));
+
+            transaction.Commit();
+            return result > 0;
         }
 
         //public Task<bool> UpdateAsync(Category category)

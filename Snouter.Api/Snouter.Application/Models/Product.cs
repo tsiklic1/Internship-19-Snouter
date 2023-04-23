@@ -15,6 +15,5 @@ namespace Snouter.Application.Models
         public List<string> Images { get; set; } = new List<string>();
 
         public Dictionary<Guid, string> Specs { get; set; } = new Dictionary<Guid, string>();
-        //public List<ProductSpec> {get;set }
     }
 }

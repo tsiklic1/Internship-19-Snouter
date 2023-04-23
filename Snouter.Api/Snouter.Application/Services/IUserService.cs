@@ -13,7 +13,7 @@ namespace Snouter.Application.Services
         Task<User?> GetByIdAsync(Guid id);
         Task<IEnumerable<User>> GetAllAsync();
 
-        //Task<Category?> UpdateAsync(Category category);
+        Task<User?> UpdateAsync(User user);
         Task<User?> DeleteAsync(Guid id);
     }
 }

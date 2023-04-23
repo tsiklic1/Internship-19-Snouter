@@ -37,5 +37,14 @@ namespace Snouter.Application.Services
         {
             return _userRepository.GetByIdAsync(id);
         }
+
+        public async Task<User?> UpdateAsync(User user)
+        {
+            var userExists = await _userRepository.ExistsByIdAsync(user.Id);
+            if (!userExists) { return null; }
+
+            await _userRepository.UpdateAsync(user);
+            return user;
+        }
     }
 }

@@ -55,7 +55,22 @@ namespace Snouter.Api.Controllers
             return Ok(response);
         }
 
+        [HttpPut]
+        [Route(ApiEndpoints.User.Update)]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserRequest request)
+        {
+            var user = request.MapToUser(id);
+            var updatedUser = await _userService.UpdateAsync(user);
 
+            if (updatedUser is null)
+            {
+                return NotFound();
+            }
+
+            var response = user.MapToResponse();
+            return Ok(response);
+
+        }
 
     }
 }

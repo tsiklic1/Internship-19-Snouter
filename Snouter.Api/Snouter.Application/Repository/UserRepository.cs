@@ -41,9 +41,12 @@ namespace Snouter.Application.Repository
             throw new NotImplementedException();
         }
 
-        public Task<bool> ExistsByIdAsync(Guid id)
+        public async Task<bool> ExistsByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition(@"
+                    select count(1) from users where id = @id
+", new { id }));
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
@@ -79,6 +82,20 @@ namespace Snouter.Application.Repository
                 return null;
             }
             return user;
+        }
+
+        public async Task<bool> UpdateAsync(User user)
+        {
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            using var transaction = connection.BeginTransaction();
+
+            var result = await connection.ExecuteAsync(new CommandDefinition(@"
+            update users set name = @Name, password = @Password, isadmin = @IsAdmin
+            where id = @Id
+        ", user));
+
+            transaction.Commit();
+            return result > 0;
         }
     }
 }

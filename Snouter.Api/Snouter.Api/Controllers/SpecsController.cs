@@ -54,5 +54,22 @@ namespace Snouter.Api.Controllers
 
             return Ok(response);
         }
+
+        [HttpPut]
+        [Route(ApiEndpoints.Spec.Update)]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateSpecRequest request)
+        {
+            var spec = request.MapToSpec(id);
+            var updatedSpec = await _specService.UpdateAsync(spec);
+
+            if (updatedSpec is null)
+            {
+                return NotFound();
+            }
+
+            var response = spec.MapToResponse();
+            return Ok(response);
+
+        }
     }
 }

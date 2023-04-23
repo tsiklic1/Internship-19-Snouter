@@ -2,6 +2,7 @@
 using Snouter.Api.Mapping;
 using Snouter.Application.Models;
 using Snouter.Application.Repository;
+using Snouter.Application.Services;
 using Snouter.Contracts.Requests;
 using Snouter.Contracts.Responses;
 
@@ -10,11 +11,11 @@ namespace Snouter.Api.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductService _productService;
 
-        public ProductsController(IProductRepository productRepository)
+        public ProductsController(IProductService productService)
         {
-            _productRepository = productRepository;
+            _productService = productService;
         }
 
         [HttpPost]
@@ -23,7 +24,7 @@ namespace Snouter.Api.Controllers
         {
             var product = request.MapToProduct();
 
-            var isCreated = _productRepository.CreateAsync(product).Result;
+            var isCreated = _productService.CreateAsync(product).Result;
 
             if (!isCreated)
             {
@@ -39,7 +40,7 @@ namespace Snouter.Api.Controllers
         [Route(ApiEndpoints.Product.GetAll)]
         public async Task<IActionResult> GetAll()
         {
-            var products = await _productRepository.GetAllAsync();
+            var products = await _productService.GetAllAsync();
 
             var response = products.MapToResponse();
 
@@ -50,7 +51,7 @@ namespace Snouter.Api.Controllers
         [Route(ApiEndpoints.Product.Get)]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
-            var product = await _productRepository.GetByIdAsync(id);
+            var product = await _productService.GetByIdAsync(id);
 
             if (product is null)
             {
