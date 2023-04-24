@@ -14,7 +14,7 @@ namespace Snouter.Application
             services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<IProductService, ProductService>();
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
-            services.AddSingleton<ICategoryService, CategoryService>();
+            services.AddSingleton<ICategoryService, CategoryService>(); 
             services.AddSingleton<ISubcategoryRepository, SubcategoryRepository>();
             services.AddSingleton<ISubcategoryService, SubcategoryService>();
             services.AddSingleton<IUserRepository, UserRepository>();   

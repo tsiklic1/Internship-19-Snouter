@@ -50,7 +50,7 @@ namespace Snouter.Application.Repository
             return true;
         }
 
-        public Task<bool> DeleteAsync(Guid id)
+        public Task<bool> DeleteByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }

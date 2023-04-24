@@ -47,6 +47,7 @@ namespace Snouter.Api
             public const string Get = $"{Base}/{{id:guid}}";
             public const string GetAll = Base;
             public const string Update = $"{Base}/{{id:guid}}";
+            public const string Delete = $"{Base}/{{id:guid}}";
         }
     }
 }

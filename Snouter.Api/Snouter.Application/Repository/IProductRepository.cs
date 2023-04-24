@@ -9,6 +9,6 @@ public interface IProductRepository
     Task<IEnumerable<Product>>GetAllAsync();
 
     Task<bool> UpdateAsync(Product product);
-    Task<bool> DeleteAsync(Guid id);
+    Task<bool> DeleteByIdAsync(Guid id);
 
 }

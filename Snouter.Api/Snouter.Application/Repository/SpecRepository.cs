@@ -41,9 +41,21 @@ namespace Snouter.Application.Repository
             return result > 0;
         }
 
-        public Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            using var transaction = connection.BeginTransaction();
+
+            await connection.ExecuteAsync(new CommandDefinition(@"
+                delete from productsspecs where specid = @Id
+", new {Id = id}));
+
+            var result = await connection.ExecuteAsync(new CommandDefinition(@"
+                delete from specs where id = @Id
+", new { Id = id}));
+
+            transaction.Commit();
+            return result > 0;
         }
 
         public async Task<bool> ExistsByIdAsync(Guid id)

@@ -25,9 +25,9 @@ namespace Snouter.Application.Services
             return _specRepository.CreateAsync(spec);
         }
 
-        public Task<bool> DeleteAsync(Guid id)
+        public Task<bool> DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return _specRepository.DeleteByIdAsync(id);
         }
 
         public Task<IEnumerable<Spec>> GetAllAsync()

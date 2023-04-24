@@ -14,7 +14,7 @@ namespace Snouter.Application.Repository
         Task<IEnumerable<Spec>> GetAllAsync();
 
         Task<bool> UpdateAsync(Spec spec);
-        Task<bool> DeleteAsync(Guid id);
+        Task<bool> DeleteByIdAsync(Guid id);
 
         Task<bool> ExistsByIdAsync(Guid id);
     }
