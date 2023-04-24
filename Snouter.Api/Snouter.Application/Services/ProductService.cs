@@ -40,9 +40,16 @@ namespace Snouter.Application.Services
             return _productRepository.GetByIdAsync(id);
         }
 
-        public Task<Product?> UpdateAsync(Product product)
+        public async Task<Product?> UpdateAsync(Product product)
         {
-            throw new NotImplementedException();
+            var productExists = await _productRepository.ExistsByIdAsync(product.Id);
+            if (!productExists)
+            {
+                return null;
+            }
+
+            await _productRepository.UpdateAsync(product);
+            return product;
         }
     }
 }

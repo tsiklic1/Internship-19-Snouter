@@ -98,7 +98,6 @@ namespace Snouter.Application.Repository
             var result = await connection.QueryAsync(new CommandDefinition(@"select id as id, title as title from categories"));
 
             return result.Select(x => new Category { Id = x.id, Title = x.title });
-            //return Task.FromResult<IEnumerable<Category>>(_categories);
         }
 
 
@@ -112,8 +111,6 @@ namespace Snouter.Application.Repository
             if (category is null) { return null;}
 
             return category;
-            //var tempCategory = _categories.FirstOrDefault(c => c.Id == id);
-            //return Task.FromResult(tempCategory);
         }
 
         public async Task<bool> UpdateAsync(Category category)
@@ -129,21 +126,5 @@ namespace Snouter.Application.Repository
             transaction.Commit();
             return result > 0;
         }
-
-        //public Task<bool> UpdateAsync(Category category)
-        //{
-        //    //var tempCategory = _categories.SingleOrDefault(x => x.Id == category.Id);
-
-
-        //    //if (tempCategory is null)
-        //    //{
-        //    //    return Task.FromResult(false);
-        //    //}
-
-        //    //tempCategory.Title = category.Title;
-
-        //    //return Task.FromResult(true);
-        //    return Task.FromResult(true);
-        //}
     }
 }

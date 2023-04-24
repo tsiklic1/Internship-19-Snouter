@@ -78,22 +78,22 @@ namespace Snouter.Api.Controllers
 
 
 
-        //[HttpPut]
-        //[Route(ApiEndpoints.Product.Update)]
-        //public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateProductRequest request)
-        //{
-        //    var product = request.MapToProduct(id);
-        //    var isUpdated = await _productRepository.UpdateAsync(product);
+        [HttpPut]
+        [Route(ApiEndpoints.Product.Update)]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateProductRequest request)
+        {
+            var product = request.MapToProduct(id);
+            var updatedProduct = await _productService.UpdateAsync(product);
 
-        //    if (!isUpdated)
-        //    {
-        //        return NotFound();
-        //    }
+            if (updatedProduct is null)
+            {
+                return NotFound();
+            }
 
-        //    var response = product.MapToResponse();
-        //    return Ok(response);
+            var response = product.MapToResponse();
+            return Ok(response);
 
-        //}
+        }
 
     }
 }

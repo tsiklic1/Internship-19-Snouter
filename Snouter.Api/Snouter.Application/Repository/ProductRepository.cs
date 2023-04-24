@@ -3,16 +3,19 @@ using Blog.Application.Database;
 using Dapper;
 using Snouter.Application.Models;
 using System.Collections.Immutable;
+using System.Globalization;
 
 namespace Snouter.Application.Repository
 {
     public class ProductRepository : IProductRepository
     {
         private readonly IDbConnectionFactory _dbConnectionFactory;
+        private readonly ISpecRepository _specRepository;
 
-        public ProductRepository(IDbConnectionFactory dbConnectionFactory)
+        public ProductRepository(IDbConnectionFactory dbConnectionFactory, ISpecRepository specRepository)
         {
             _dbConnectionFactory = dbConnectionFactory;
+            _specRepository = specRepository;
         }
 
         public async Task<bool> CreateAsync(Product product)
@@ -21,8 +24,8 @@ namespace Snouter.Application.Repository
             using var transaction = connection.BeginTransaction();
 
             var result = await connection.ExecuteAsync(new CommandDefinition(@"
-                            insert into products (id, title, issold, priceincents, categoryid, subcategoryid, sellerid)
-                            values (@Id, @Title, @IsSold,@PriceInCents, @CategoryId,@SubcategoryId, @SellerId)
+                            insert into products (id, title, issold, priceincents, categoryid, subcategoryid, sellerid, location)
+                            values (@Id, @Title, @IsSold,@PriceInCents, @CategoryId,@SubcategoryId, @SellerId, @Location)
                     ", product));
 
             if (result <= 0)
@@ -59,6 +62,7 @@ namespace Snouter.Application.Repository
               p.title AS product_title,
               p.issold AS product_issold,
               p.priceincents AS product_priceincents,
+              p.location as location,
               c.id AS category_id,
               s.id AS subcategory_id,
               u.id AS seller_id,
@@ -87,6 +91,7 @@ namespace Snouter.Application.Repository
                 CategoryId = row.category_id,
                 SubcategoryId = row.subcategory_id,
                 SellerId = row.seller_id,
+                Location= row.location,
                 Images = _ConvertImages(row.image_urls),
                 Specs = _ConvertSpecs(row.specs_info)
             }) ;
@@ -109,7 +114,7 @@ namespace Snouter.Application.Repository
         {
             using var connection = await _dbConnectionFactory.CreateConnectionAsync();
             var product = await connection.QuerySingleOrDefaultAsync<Product>(new CommandDefinition(@"
-                select id, title, issold, priceincents, categoryid, subcategoryid, sellerid
+                select id, title, issold, priceincents, categoryid, subcategoryid, sellerid, location
                 from products where id = @Id
 ", new { Id = id }));
 
@@ -137,7 +142,72 @@ namespace Snouter.Application.Repository
 
         public async Task<bool> UpdateAsync(Product product)
         {
-            throw new NotImplementedException();
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            using var transaction = connection.BeginTransaction();
+
+            await connection.ExecuteAsync(new CommandDefinition(@"
+                delete from images where productid = @Id
+", product));
+
+            foreach (var image in product.Images)
+            {
+                await connection.ExecuteAsync(new CommandDefinition(@"
+                                insert into images (id, src, productid)
+                                values (@Id, @Src, @ProductId)
+            ", new { Id = Guid.NewGuid(), Src = image, ProductId = product.Id }));
+            }
+
+            var oldSpecIds = await connection.QueryAsync<Guid>(new CommandDefinition(@"
+                select specid from productsspecs where productid = @Id
+", product));
+
+            var newSpecs = new Dictionary<Guid, string>();
+            var oldSpecs = new Dictionary<Guid, string>();
+
+            foreach (var spec in product.Specs)
+            {
+                if (!oldSpecIds.Contains(spec.Key))
+                {
+                    newSpecs.Add(spec.Key, spec.Value);
+                }
+                else
+                {
+                    oldSpecs.Add(spec.Key, spec.Value);
+                }
+            }
+
+            foreach (var spec in oldSpecs)
+            {
+                await connection.ExecuteAsync(new CommandDefinition(@"
+                    update productsspecs set 
+                    specinfo = @SpecInfo
+                    where specid = @SpecId and productid = @ProductId
+", new { ProductId = product.Id, SpecId = spec.Key, SpecInfo = spec.Value }));
+
+            }
+
+            foreach (var spec in newSpecs)
+            {
+                await connection.ExecuteAsync(new CommandDefinition(@"
+                    insert into productsspecs (id, productid, specid, specinfo)
+                    values (@Id, @ProductId, @SpecId, @SpecInfo)
+", new { Id = Guid.NewGuid(), ProductId = product.Id, SpecId = spec.Key, SpecInfo = spec.Value}));
+            }
+
+            var result = await connection.ExecuteAsync(new CommandDefinition(@"
+                update products set 
+                title = @Title,
+                issold = @IsSold,
+                priceincents = @PriceInCents,
+                location = @Location,
+                categoryid = @CategoryId,
+                subcategoryId = @SubcategoryId,
+                sellerid = @SellerId
+                where id = @Id
+", product));
+
+            transaction.Commit();
+            return result > 0;
         }
 
         public async Task<bool> DeleteByIdAsync(Guid id)
@@ -161,64 +231,12 @@ namespace Snouter.Application.Repository
             return result > 0;
         }
 
-
-
-
-        //        //Task<bool> IProductRepository.DeleteAsync(Guid id)
-        //        //{
-        //        //    return Task.FromResult(false);
-        //        //    //var tempProduct = _products.SingleOrDefault(x => x.Id == id);
-        //        //    //if (tempProduct is null)
-        //        //    //{
-        //        //    //    return Task.FromResult(false);
-        //        //    //}
-
-        //        //    //_products.Remove(tempProduct);
-        //        //    //return Task.FromResult(true);
-        //        //}
-
-        //        async Task<IEnumerable<Product>> IProductRepository.GetAllAsync()
-        //        {
-        //            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
-        //            var result = await connection.QueryAsync(new CommandDefinition(@"
-        //               select products.id as id, products.title as title,
-        //                products.issold as issold, product.priceincents as priceincents,
-        //                products.categoryid as categoryid, products.subcategoryid as subcategoryid,
-
-        //from products 
-        //join productsspecs on products.id = productsspecs.productid
-        //join specs on specs.id = productsspecs.specid; 
-        //"));
-
-        //        }
-
-        //        async Task<Product?> IProductRepository.GetByIdAsync(Guid id)
-        //        {
-        //            //var tempProduct = _products.FirstOrDefault(x => x.Id == id);
-        //            //return Task.FromResult(tempProduct);
-        //            return true;
-        //        }
-
-        //Task<bool> IProductRepository.UpdateAsync(Product product)
-        //{
-        //    var tempProduct = _products.SingleOrDefault(x => x.Id == product.Id);
-
-
-        //    if (tempProduct is null)
-        //    {
-        //        return Task.FromResult(false);
-        //    }
-
-        //    tempProduct.Title= product.Title;
-        //    tempProduct.IsSold= product.IsSold;
-        //    tempProduct.PriceInCents= product.PriceInCents;
-        //    tempProduct.Category = product.Category;
-        //    tempProduct.SubCategory = product.SubCategory;
-        //    tempProduct.Images= product.Images;
-        //    tempProduct.Properties= product.Properties;
-
-        //    return Task.FromResult(true);
-
-        //}
+        public async Task<bool> ExistsByIdAsync(Guid id)
+        {
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition(@"
+                    select count(1) from products where id = @id
+", new { id }));
+        }
     }
 }
