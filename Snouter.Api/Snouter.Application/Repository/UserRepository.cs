@@ -65,17 +65,6 @@ namespace Snouter.Application.Repository
                 delete from users where id = @Id
 ", new { Id = id }));
 
-            //    await connection.ExecuteAsync(new CommandDefinition(@"
-            //    delete from categories where postid = @id
-            //", new { id }));
-
-            //    var result = await connection.ExecuteAsync(new CommandDefinition(@"
-            //    delete from posts where id = @id
-            //", new { id }));
-
-            //    transaction.Commit();
-            //    return result > 0;
-
             transaction.Commit();
             return result > 0;
         }

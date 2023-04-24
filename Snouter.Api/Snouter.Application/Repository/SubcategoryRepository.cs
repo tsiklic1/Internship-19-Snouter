@@ -13,12 +13,12 @@ namespace Snouter.Application.Repository
     public class SubcategoryRepository : ISubcategoryRepository
     {
         private readonly IDbConnectionFactory _dbConnectionFactory;
-        //private readonly ICategoryRepository _categoryRepository;
+        private readonly IProductRepository _productRepository;
 
-        public SubcategoryRepository(IDbConnectionFactory dbConnectionFactory)
+        public SubcategoryRepository(IDbConnectionFactory dbConnectionFactory, IProductRepository productRepository)
         {
             _dbConnectionFactory = dbConnectionFactory;
-            //_categoryRepository = categoryRepository;
+            _productRepository = productRepository;
         }
         public async Task<bool> CreateAsync(Subcategory subcategory)
         {
@@ -38,10 +38,18 @@ namespace Snouter.Application.Repository
             return result > 0;
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteByIdAsync(Guid id)
         {
             using var connection = await _dbConnectionFactory.CreateConnectionAsync();
             using var transaction = connection.BeginTransaction();
+
+            var productIds = await connection.QueryAsync<Guid>(new CommandDefinition(@"
+                select id from products where subcategoryid = @Id
+", new { Id = id }));
+            
+            foreach (var productId in productIds) {
+                await _productRepository.DeleteByIdAsync(productId);
+            }
 
             var result = await connection.ExecuteAsync(new CommandDefinition(@"
                 delete from subcategories where id = @id

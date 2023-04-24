@@ -22,18 +22,12 @@ namespace Snouter.Application.Services
         }
         public Task<bool> CreateAsync(Subcategory subcategory)
         {
-            //var categoryExists = await _categoryRepository.ExistsByIdAsync(subcategory.Id);
-            //if (!categoryExists)
-            //{
-            //    return false;
-            //}
-
             return _subcategoryRepository.CreateAsync(subcategory);
         }
 
-        public Task<bool> DeleteAsync(Guid id)
+        public Task<bool> DeleteByIdAsync(Guid id)
         {
-            return _subcategoryRepository.DeleteAsync(id);
+            return _subcategoryRepository.DeleteByIdAsync(id);
         }
 
         public Task<IEnumerable<Subcategory>> GetAllAsync()
