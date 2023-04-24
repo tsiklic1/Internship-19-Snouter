@@ -14,6 +14,6 @@ namespace Snouter.Application.Services
         Task<IEnumerable<Product>> GetAllAsync();
 
         Task<Product?> UpdateAsync(Product product);
-        Task<Product?> DeleteAsync(Guid id);
+        Task<bool> DeleteByIdAsync(Guid id);
     }
 }

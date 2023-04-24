@@ -23,9 +23,9 @@ namespace Snouter.Application.Services
             return _userRepository.CreateAsync(user);
         }
 
-        public Task<User?> DeleteAsync(Guid id)
+        public Task<bool> DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return _userRepository.DeleteByIdAsync(id);
         }
 
         public Task<IEnumerable<User>> GetAllAsync()

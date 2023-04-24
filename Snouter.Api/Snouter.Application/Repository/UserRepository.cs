@@ -36,9 +36,48 @@ namespace Snouter.Application.Repository
             return true;
         }
 
-        public Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            using var transaction = connection.BeginTransaction();
+
+            var productIds = await connection.QueryAsync<Guid>(new CommandDefinition(@"
+                select id from products where sellerid = @Id;
+", new { Id = id }));
+
+            foreach (var productId in productIds) {
+                await connection.ExecuteAsync(new CommandDefinition(@"
+                delete from productsspecs where productid = @Id
+", new { Id = productId}));
+            }
+
+            foreach (var productId in productIds) {
+                await connection.ExecuteAsync(new CommandDefinition(@"
+                delete from images where productid = @Id
+", new { Id = productId }));
+            }
+
+            await connection.QueryAsync(new CommandDefinition(@"
+                delete from products where sellerid = @Id
+", new {Id = id }));
+
+            var result = await connection.ExecuteAsync(new CommandDefinition(@"
+                delete from users where id = @Id
+", new { Id = id }));
+
+            //    await connection.ExecuteAsync(new CommandDefinition(@"
+            //    delete from categories where postid = @id
+            //", new { id }));
+
+            //    var result = await connection.ExecuteAsync(new CommandDefinition(@"
+            //    delete from posts where id = @id
+            //", new { id }));
+
+            //    transaction.Commit();
+            //    return result > 0;
+
+            transaction.Commit();
+            return result > 0;
         }
 
         public async Task<bool> ExistsByIdAsync(Guid id)

@@ -25,9 +25,9 @@ namespace Snouter.Application.Services
             return _productRepository.CreateAsync(product);
         }
 
-        public Task<Product?> DeleteAsync(Guid id)
+        public Task<bool> DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return _productRepository.DeleteByIdAsync(id);
         }
 
         public Task<IEnumerable<Product>> GetAllAsync()

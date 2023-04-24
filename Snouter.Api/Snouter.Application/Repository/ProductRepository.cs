@@ -50,11 +50,6 @@ namespace Snouter.Application.Repository
             return true;
         }
 
-        public Task<bool> DeleteByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             using var connection = await _dbConnectionFactory.CreateConnectionAsync();
@@ -143,6 +138,27 @@ namespace Snouter.Application.Repository
         public async Task<bool> UpdateAsync(Product product)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> DeleteByIdAsync(Guid id)
+        {
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            using var transaction = connection.BeginTransaction();
+
+            await connection.ExecuteAsync(new CommandDefinition(@"
+            delete from images where productid = @Id
+        ", new { Id = id }));
+
+            await connection.ExecuteAsync(new CommandDefinition(@"
+            delete from productsspecs where productid = @Id
+        ", new { Id = id }));
+
+            var result = await connection.ExecuteAsync(new CommandDefinition(@"
+            delete from products where id = @Id
+", new {Id = id}));
+
+            transaction.Commit();
+            return result > 0;
         }
 
 
