@@ -74,5 +74,18 @@ namespace Snouter.Api.Controllers
             return Ok(response);
 
         }
+
+        [HttpDelete]
+        [Route(ApiEndpoints.Category.Delete)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var isDeleted = await _categoryService.DeleteByIdAsync(id);
+            if (!isDeleted)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
     }
 }

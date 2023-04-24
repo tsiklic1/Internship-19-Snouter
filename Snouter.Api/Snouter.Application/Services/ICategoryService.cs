@@ -14,7 +14,7 @@ namespace Snouter.Application.Services
         Task<IEnumerable<Category>> GetAllAsync();
 
         Task<Category?> UpdateAsync(Category category);
-        Task<Category?> DeleteAsync(Guid id);
+        Task<bool> DeleteByIdAsync(Guid id);
 
     }
 }

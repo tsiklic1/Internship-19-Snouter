@@ -21,7 +21,8 @@ namespace Snouter.Api.Mapping
                 SubcategoryId= request.SubcategoryId,
                 SellerId= request.SellerId,
                 Images = request.Images,
-                Specs = request.Specs
+                Specs = request.Specs,
+                Location= request.Location,
             };
         }
 
@@ -37,11 +38,12 @@ namespace Snouter.Api.Mapping
                 SubcategoryId = request.SubcategoryId,
                 SellerId = request.SellerId,
                 Images = request.Images,
-                Specs = request.Specs
+                Specs = request.Specs,
+                Location = request.Location,
             };
         }
 
-public static ProductResponse MapToResponse(this Product product)
+        public static ProductResponse MapToResponse(this Product product)
         {
             return new ProductResponse
             {
@@ -53,7 +55,8 @@ public static ProductResponse MapToResponse(this Product product)
                 SubcategoryId = product.SubcategoryId,
                 SellerId= product.SellerId,
                 Images = product.Images,
-                Specs = product.Specs
+                Specs = product.Specs,
+                Location = product.Location,
             };
         }
 

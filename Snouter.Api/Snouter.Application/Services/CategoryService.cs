@@ -21,9 +21,9 @@ namespace Snouter.Application.Services
             return _categoryRepository.CreateAsync(category);
         }
 
-        public Task<Category?> DeleteAsync(Guid id)
+        public Task<bool> DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return _categoryRepository.DeleteByIdAsync(id);
         }
 
         public Task<IEnumerable<Category>> GetAllAsync()

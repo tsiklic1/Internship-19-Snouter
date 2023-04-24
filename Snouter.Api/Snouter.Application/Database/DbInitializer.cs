@@ -54,7 +54,8 @@ create table if not exists products(
 	priceincents int not null,
 	categoryid uuid references categories (id),
 	subcategoryid uuid references subcategories (id),
-	sellerid uuid references users (id)
+	sellerid uuid references users (id),
+	location varchar not null
 );
 ");
         await connection.ExecuteAsync(@"

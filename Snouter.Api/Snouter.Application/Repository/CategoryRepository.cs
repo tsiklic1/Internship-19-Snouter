@@ -15,10 +15,15 @@ namespace Snouter.Application.Repository
         //private List<Category> _categories = new List<Category>();
 
         private readonly IDbConnectionFactory _dbConnectionFactory;
+        private readonly IProductRepository _productRepository;
+        private readonly ISubcategoryRepository _subcategoryRepository;
 
-        public CategoryRepository(IDbConnectionFactory dbConnectionFactory)
+        public CategoryRepository(IDbConnectionFactory dbConnectionFactory,
+            IProductRepository productRepository, ISubcategoryRepository subcategoryRepository)
         {
             _dbConnectionFactory = dbConnectionFactory;
+            _productRepository = productRepository;
+            _subcategoryRepository = subcategoryRepository;
         }
 
         public async Task<bool> CreateAsync(Category category)
@@ -47,25 +52,35 @@ namespace Snouter.Application.Repository
             //return Task.FromResult(true);
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteByIdAsync(Guid id)
         {
             using var connection = await _dbConnectionFactory.CreateConnectionAsync();
             using var transaction = connection.BeginTransaction();
 
+            var productIds = await connection.QueryAsync<Guid>(new CommandDefinition(@"
+                select id from products where categoryid = @Id
+", new { Id = id }));
+
+            foreach (var productId in productIds) {
+                await _productRepository.DeleteByIdAsync(productId);
+            }
+
+            var subcategoryIds = await connection.QueryAsync<Guid>(new CommandDefinition(@"
+                select id from subcategories where categoryid = @Id
+", new {Id = id}));
+
+            foreach (var subcategoryId in subcategoryIds)
+            {
+                await _subcategoryRepository.DeleteByIdAsync(subcategoryId);
+            }
+
             var result = await connection.ExecuteAsync(new CommandDefinition(@"
-                delete from categories where id = @id
-", new { id }));
+                delete from categories where id = @Id
+", new { Id = id }));
 
 
             transaction.Commit();
             return result > 0;
-
-            //var tempCategory = _categories.SingleOrDefault(c => c.Id == id);
-            //if (tempCategory is null) {
-            //    return Task.FromResult(false);
-            //}
-            //_categories.Remove(tempCategory);
-            //return Task.FromResult(true);
         }
 
         public async Task<bool> ExistsByIdAsync(Guid id)

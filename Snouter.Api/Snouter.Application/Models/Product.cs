@@ -1,4 +1,6 @@
 ﻿
+using System.Data.Common;
+
 namespace Snouter.Application.Models
 {
     public class Product
@@ -12,6 +14,8 @@ namespace Snouter.Application.Models
         public Guid SubcategoryId { get; set; }
 
         public Guid SellerId { get; set; }
+
+        public string Location { get; set; }
         public List<string> Images { get; set; } = new List<string>();
 
         public Dictionary<Guid, string> Specs { get; set; } = new Dictionary<Guid, string>();
