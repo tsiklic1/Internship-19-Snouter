@@ -4,6 +4,7 @@ using Dapper;
 using Snouter.Application.Models;
 using System.Collections.Immutable;
 using System.Globalization;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Snouter.Application.Repository
 {
@@ -237,6 +238,25 @@ namespace Snouter.Application.Repository
             return await connection.ExecuteScalarAsync<bool>(new CommandDefinition(@"
                     select count(1) from products where id = @id
 ", new { id }));
+        }
+
+        public async Task<bool> SpecsMachCategory(Product product)
+        {
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+
+            foreach (var specId in product.Specs.Keys.ToList()) {
+                var categoryIdFromSpec = await connection.QuerySingleOrDefaultAsync<Guid>(new CommandDefinition(@"
+                    select categoryid from specs
+                    where id = @Id
+", new { Id = specId }));
+
+                if(categoryIdFromSpec != product.CategoryId)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

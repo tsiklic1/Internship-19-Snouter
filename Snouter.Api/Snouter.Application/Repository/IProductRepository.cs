@@ -13,4 +13,6 @@ public interface IProductRepository
 
     Task<bool> ExistsByIdAsync(Guid id);
 
+    Task<bool> SpecsMachCategory(Product product);
+
 }

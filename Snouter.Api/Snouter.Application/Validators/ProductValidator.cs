@@ -15,12 +15,16 @@ namespace Snouter.Application.Validators
         private readonly ICategoryRepository _categoryRepository;
         private readonly ISubcategoryRepository _subcategoryRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IProductRepository _productRepository;
         public ProductValidator(ICategoryRepository categoryRepository,
-            ISubcategoryRepository subcategoryRepository, IUserRepository userRepository)
+            ISubcategoryRepository subcategoryRepository,
+            IUserRepository userRepository,
+            IProductRepository productRepository)
         {
             _categoryRepository = categoryRepository;
             _subcategoryRepository = subcategoryRepository;
             _userRepository = userRepository;
+            _productRepository = productRepository;
 
             RuleFor(x => x.Id).NotEmpty();
 
@@ -48,14 +52,17 @@ namespace Snouter.Application.Validators
                 .MustAsync(ValidateSeller)
                 .WithMessage("Seller does not exist");
 
-            //rule da subkategorija pripada kategoriji
             //rule da svi specovi pripadaju kategoriji
 
             RuleFor(x => x)
                 .MustAsync(ValidateSubcategoryMatchesCategory)
                 .WithMessage("Inserted subcategory does not belong to category");
 
+            RuleFor(x => x)
+                .MustAsync(ValidateSpecsMatchCategory)
+                .WithMessage("Not all specs belong to category");
         }
+
         private bool ValidatePrice(int priceInCents)
         {
             return priceInCents > 0;
@@ -82,6 +89,11 @@ namespace Snouter.Application.Validators
         private async Task<bool> ValidateSubcategoryMatchesCategory(Product product, CancellationToken token)
         {
             return await _subcategoryRepository.MatchesCategoryId(product.SubcategoryId, product.CategoryId);
+        }
+
+        private async Task<bool> ValidateSpecsMatchCategory(Product product, CancellationToken token)
+        {
+            return await _productRepository.SpecsMachCategory(product);
         }
     }
 }
