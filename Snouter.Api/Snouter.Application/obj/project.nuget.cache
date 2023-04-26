@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "xuIbSjuYwzwLnFbJQ/X5y0xbaUV8s5dbiDsunDOT8DvFHcpjUzhgBR5u3d4k1lwiDfz7eY1EygJBQMxrNSlwLw==",
+  "dgSpecHash": "EaGQ0K90USEEgLOavptyfQp8f/E8/Dn3S2DAYcfyuxMRqXG6yjyhXUinwT+soClwvFZAFUmQTDKixKC+SvF0IQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\tomas\\19-domaci-internship\\Internship-19-Snouter\\Snouter.Api\\Snouter.Application\\Snouter.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tomas\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
+    "C:\\Users\\tomas\\.nuget\\packages\\fluentvalidation\\11.5.2\\fluentvalidation.11.5.2.nupkg.sha512",
+    "C:\\Users\\tomas\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.2\\fluentvalidation.dependencyinjectionextensions.11.5.2.nupkg.sha512",
     "C:\\Users\\tomas\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.3\\microsoft.entityframeworkcore.7.0.3.nupkg.sha512",
     "C:\\Users\\tomas\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.3\\microsoft.entityframeworkcore.abstractions.7.0.3.nupkg.sha512",
     "C:\\Users\\tomas\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.3\\microsoft.entityframeworkcore.analyzers.7.0.3.nupkg.sha512",

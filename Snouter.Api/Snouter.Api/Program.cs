@@ -1,4 +1,5 @@
 using Blog.Application.Database;
+using Snouter.Api.Mapping;
 using Snouter.Application;
 
 
@@ -27,6 +28,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+
+app.UseMiddleware<ValidationMappingMiddleware>();
 app.MapControllers();
 
 var dbInitializer = app.Services.GetRequiredService<DbInitializer>();

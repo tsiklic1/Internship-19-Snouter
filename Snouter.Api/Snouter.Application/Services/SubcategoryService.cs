@@ -1,4 +1,5 @@
-﻿using Snouter.Application.Models;
+﻿using FluentValidation;
+using Snouter.Application.Models;
 using Snouter.Application.Repository;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,21 @@ namespace Snouter.Application.Services
 
         private readonly ICategoryRepository _categoryRepository;
 
-        public SubcategoryService(ISubcategoryRepository subcategoryRepository, ICategoryRepository categoryRepository)
+        private readonly IValidator<Subcategory> _subcategoryValidator;
+
+        public SubcategoryService(ISubcategoryRepository subcategoryRepository,
+            ICategoryRepository categoryRepository,
+            IValidator<Subcategory> subcategoryValidator)
         {
             _subcategoryRepository = subcategoryRepository;
             _categoryRepository = categoryRepository;
+            _subcategoryValidator = subcategoryValidator;
 
         }
-        public Task<bool> CreateAsync(Subcategory subcategory)
+        public async Task<bool> CreateAsync(Subcategory subcategory)
         {
-            return _subcategoryRepository.CreateAsync(subcategory);
+            await _subcategoryValidator.ValidateAndThrowAsync(subcategory);
+            return await _subcategoryRepository.CreateAsync(subcategory);
         }
 
         public Task<bool> DeleteByIdAsync(Guid id)
@@ -42,11 +49,10 @@ namespace Snouter.Application.Services
 
         public async Task<Subcategory?> UpdateAsync(Subcategory subcategory)
         {
-            var categoryExists = await _categoryRepository.ExistsByIdAsync(subcategory.CategoryId);
-            if (!categoryExists) { return null; }
-
             var subcategoryExists = await _subcategoryRepository.ExistsByIdAsync(subcategory.Id);
             if (!subcategoryExists) { return null; }
+
+            await _subcategoryValidator.ValidateAndThrowAsync(subcategory);
 
             await _subcategoryRepository.UpdateAsync(subcategory);
             return subcategory;

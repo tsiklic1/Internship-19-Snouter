@@ -1,4 +1,5 @@
-﻿using Snouter.Application.Models;
+﻿using FluentValidation;
+using Snouter.Application.Models;
 using Snouter.Application.Repository;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,23 @@ namespace Snouter.Application.Services
 
         private readonly ICategoryRepository _categoryRepository;
 
-        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        private readonly IValidator<Product> _productValidator;
+
+
+
+
+        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository, IValidator<Product> productValidator)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
+            _productValidator = productValidator;
 
         }
-        public Task<bool> CreateAsync(Product product)
+        public async Task<bool> CreateAsync(Product product)
         {
-            return _productRepository.CreateAsync(product);
+            await _productValidator.ValidateAndThrowAsync(product);
+
+            return await _productRepository.CreateAsync(product);
         }
 
         public Task<bool> DeleteByIdAsync(Guid id)

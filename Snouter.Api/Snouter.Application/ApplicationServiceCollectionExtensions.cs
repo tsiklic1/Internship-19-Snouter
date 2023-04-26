@@ -1,6 +1,7 @@
 ﻿
 
 using Blog.Application.Database;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Snouter.Application.Repository;
 using Snouter.Application.Services;
@@ -21,6 +22,8 @@ namespace Snouter.Application
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<ISpecService, SpecService>();
             services.AddSingleton<ISpecRepository, SpecRepository>();
+
+            services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
 
             return services;
         }

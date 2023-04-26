@@ -1,4 +1,5 @@
-﻿using Snouter.Application.Models;
+﻿using FluentValidation;
+using Snouter.Application.Models;
 using Snouter.Application.Repository;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,17 @@ namespace Snouter.Application.Services
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryService(ICategoryRepository categoryRepository)
+        private readonly IValidator<Category> _categoryValidator;
+
+        public CategoryService(ICategoryRepository categoryRepository, IValidator<Category> categoryValidator)
         {
             _categoryRepository = categoryRepository;
+            _categoryValidator = categoryValidator;
         }
-        public Task<bool> CreateAsync(Category category)
+        public async Task<bool> CreateAsync(Category category)
         {
-            return _categoryRepository.CreateAsync(category);
+            await _categoryValidator.ValidateAndThrowAsync(category);
+            return await _categoryRepository.CreateAsync(category);
         }
 
         public Task<bool> DeleteByIdAsync(Guid id)
@@ -38,6 +43,7 @@ namespace Snouter.Application.Services
 
         public async Task<Category?> UpdateAsync(Category category)
         {
+            await _categoryValidator.ValidateAndThrowAsync(category);
             var categoryExists = await _categoryRepository.ExistsByIdAsync(category.Id);
             if (!categoryExists) { return null; }
             await _categoryRepository.UpdateAsync(category);

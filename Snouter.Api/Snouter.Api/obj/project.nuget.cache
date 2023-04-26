@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "fcmUGPJXhIaQIjPl+ZJOznYGZodL0Kis9rcNv3I6A/nCJpwYK2yw9JgEi2/uwB86g+EslAYfD9HBCDd8VgNjdg==",
+  "dgSpecHash": "A5N+jdD/EP98TP2hkrwHGlc2Cx9mYDkf3c3iNzAAmOPprNV9EStHnDuy+7XNg/KNQz7MvsVz5ihKxxqTTxPObA==",
   "success": true,
   "projectFilePath": "C:\\Users\\tomas\\19-domaci-internship\\Internship-19-Snouter\\Snouter.Api\\Snouter.Api\\Snouter.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tomas\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
+    "C:\\Users\\tomas\\.nuget\\packages\\fluentvalidation\\11.5.2\\fluentvalidation.11.5.2.nupkg.sha512",
+    "C:\\Users\\tomas\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.2\\fluentvalidation.dependencyinjectionextensions.11.5.2.nupkg.sha512",
     "C:\\Users\\tomas\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.0\\microsoft.aspnetcore.openapi.7.0.0.nupkg.sha512",
     "C:\\Users\\tomas\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.3\\microsoft.entityframeworkcore.7.0.3.nupkg.sha512",
     "C:\\Users\\tomas\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.3\\microsoft.entityframeworkcore.abstractions.7.0.3.nupkg.sha512",
