@@ -1,4 +1,5 @@
-﻿using Snouter.Application.Models;
+﻿using FluentValidation;
+using Snouter.Application.Models;
 using Snouter.Application.Repository;
 using System;
 using System.Collections.Generic;
@@ -13,16 +14,21 @@ namespace Snouter.Application.Services
         private readonly ISpecRepository _specRepository;
 
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IValidator<Spec> _specValidator;
 
-        public SpecService(ISpecRepository specRepository, ICategoryRepository categoryRepository)
+        public SpecService(ISpecRepository specRepository,
+            ICategoryRepository categoryRepository,
+            IValidator<Spec> specValidator)
         {
             _specRepository = specRepository;
             _categoryRepository = categoryRepository;
+            _specValidator = specValidator;
 
         }
-        public Task<bool> CreateAsync(Spec spec)
+        public async Task<bool> CreateAsync(Spec spec)
         {
-            return _specRepository.CreateAsync(spec);
+            await _specValidator.ValidateAndThrowAsync(spec);
+            return await _specRepository.CreateAsync(spec);
         }
 
         public Task<bool> DeleteByIdAsync(Guid id)
@@ -42,8 +48,10 @@ namespace Snouter.Application.Services
 
         public async Task<Spec?> UpdateAsync(Spec spec)
         {
-            var categoryExists = await _categoryRepository.ExistsByIdAsync(spec.CategoryId);
-            if (!categoryExists) { return null; }
+            //var categoryExists = await _categoryRepository.ExistsByIdAsync(spec.CategoryId);
+            //if (!categoryExists) { return null; }
+
+            await _specValidator.ValidateAndThrowAsync(spec);
 
             var specExists = await _specRepository.ExistsByIdAsync(spec.Id);
             if (!specExists) { return null; }

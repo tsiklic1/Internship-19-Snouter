@@ -49,10 +49,10 @@ namespace Snouter.Application.Services
 
         public async Task<Subcategory?> UpdateAsync(Subcategory subcategory)
         {
+            await _subcategoryValidator.ValidateAndThrowAsync(subcategory);
             var subcategoryExists = await _subcategoryRepository.ExistsByIdAsync(subcategory.Id);
             if (!subcategoryExists) { return null; }
 
-            await _subcategoryValidator.ValidateAndThrowAsync(subcategory);
 
             await _subcategoryRepository.UpdateAsync(subcategory);
             return subcategory;

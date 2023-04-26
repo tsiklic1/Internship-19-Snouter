@@ -1,4 +1,5 @@
-﻿using Snouter.Application.Models;
+﻿using FluentValidation;
+using Snouter.Application.Models;
 using Snouter.Application.Repository;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,18 @@ namespace Snouter.Application.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IValidator<User> _userValidator;
 
-
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IValidator<User> userValidator)
         {
             _userRepository = userRepository;
+            _userValidator = userValidator;
 
         }
-        public Task<bool> CreateAsync(User user)
+        public async Task<bool> CreateAsync(User user)
         {
-            return _userRepository.CreateAsync(user);
+            await _userValidator.ValidateAndThrowAsync(user);
+            return await _userRepository.CreateAsync(user);
         }
 
         public Task<bool> DeleteByIdAsync(Guid id)
@@ -40,6 +43,7 @@ namespace Snouter.Application.Services
 
         public async Task<User?> UpdateAsync(User user)
         {
+            await _userValidator.ValidateAndThrowAsync(user);
             var userExists = await _userRepository.ExistsByIdAsync(user.Id);
             if (!userExists) { return null; }
 
