@@ -16,11 +16,9 @@ namespace Snouter.Application.Services
         private readonly ICategoryRepository _categoryRepository;
 
         private readonly IValidator<Product> _productValidator;
-
-
-
-
-        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository, IValidator<Product> productValidator)
+        public ProductService(IProductRepository productRepository,
+            ICategoryRepository categoryRepository,
+            IValidator<Product> productValidator)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;

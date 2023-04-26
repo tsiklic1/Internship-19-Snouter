@@ -55,7 +55,6 @@ namespace Snouter.Application.Repository
                 delete from subcategories where id = @id
 ", new { id }));
 
-
             transaction.Commit();
             return result > 0;
         }
@@ -126,6 +125,16 @@ namespace Snouter.Application.Repository
 
             transaction.Commit();
             return result > 0;
+        }
+        public async Task<bool> MatchesCategoryId(Guid subcategoryId, Guid categoryId)
+        {
+            using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+            var storedCategoryId = await connection.QuerySingleOrDefaultAsync<Guid>(new CommandDefinition(@"
+                select categoryid from subcategories
+                where id = @Id
+", new { Id = subcategoryId }));
+
+            return storedCategoryId == categoryId;
         }
     }
 }

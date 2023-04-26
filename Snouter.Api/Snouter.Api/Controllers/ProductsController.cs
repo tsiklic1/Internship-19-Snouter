@@ -24,12 +24,14 @@ namespace Snouter.Api.Controllers
         {
             var product = request.MapToProduct();
 
-            var isCreated = _productService.CreateAsync(product).Result;
+            //var isCreated = _productService.CreateAsync(product).Result;
 
-            if (!isCreated)
-            {
-                return BadRequest();
-            }
+            //if (!isCreated)
+            //{
+            //    return BadRequest();
+            //}
+
+            await _productService.CreateAsync(product);
 
             var response = product.MapToResponse();
 

@@ -17,5 +17,7 @@ namespace Snouter.Application.Repository
         Task<bool> DeleteByIdAsync(Guid id);
 
         Task<bool> ExistsByIdAsync(Guid id);
+
+        Task<bool> MatchesCategoryId(Guid subcategoryId, Guid categoryId);
     }
 }
