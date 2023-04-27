@@ -43,3 +43,11 @@ C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Ap
 C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\FluentValidation.dll
 C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\tomas\19-domaci-internship\Internship-19-Snouter\Snouter.Api\Snouter.Api\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll

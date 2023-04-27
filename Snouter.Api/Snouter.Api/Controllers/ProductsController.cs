@@ -20,7 +20,7 @@ namespace Snouter.Api.Controllers
 
         [HttpPost]
         [Route(ApiEndpoints.Product.Create)]
-        public async Task<IActionResult> Create([FromBody] CreateProductRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateProductRequest request, CancellationToken token)
         {
             var product = request.MapToProduct();
 
@@ -31,7 +31,7 @@ namespace Snouter.Api.Controllers
             //    return BadRequest();
             //}
 
-            await _productService.CreateAsync(product);
+            await _productService.CreateAsync(product, token);
 
             var response = product.MapToResponse();
 
@@ -40,9 +40,9 @@ namespace Snouter.Api.Controllers
 
         [HttpGet]
         [Route(ApiEndpoints.Product.GetAll)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken token)
         {
-            var products = await _productService.GetAllAsync();
+            var products = await _productService.GetAllAsync(token);
 
             var response = products.MapToResponse();
 
@@ -51,9 +51,9 @@ namespace Snouter.Api.Controllers
 
         [HttpGet]
         [Route(ApiEndpoints.Product.Get)]
-        public async Task<IActionResult> Get([FromRoute] Guid id)
+        public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken token)
         {
-            var product = await _productService.GetByIdAsync(id);
+            var product = await _productService.GetByIdAsync(id, token);
 
             if (product is null)
             {
@@ -67,9 +67,9 @@ namespace Snouter.Api.Controllers
 
         [HttpDelete]
         [Route(ApiEndpoints.Product.Delete)]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
         {
-            var isDeleted = await _productService.DeleteByIdAsync(id);
+            var isDeleted = await _productService.DeleteByIdAsync(id, token);
             if (!isDeleted)
             {
                 return NotFound();
@@ -82,10 +82,10 @@ namespace Snouter.Api.Controllers
 
         [HttpPut]
         [Route(ApiEndpoints.Product.Update)]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateProductRequest request)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateProductRequest request, CancellationToken token)
         {
             var product = request.MapToProduct(id);
-            var updatedProduct = await _productService.UpdateAsync(product);
+            var updatedProduct = await _productService.UpdateAsync(product, token);
 
             if (updatedProduct is null)
             {

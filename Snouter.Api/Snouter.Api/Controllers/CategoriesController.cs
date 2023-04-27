@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Snouter.Api.Mapping;
 using Snouter.Application.Repository;
 using Snouter.Application.Services;
@@ -19,12 +20,12 @@ namespace Snouter.Api.Controllers
 
         [HttpPost]
         [Route(ApiEndpoints.Category.Create)]
-        public async Task<IActionResult> Create([FromBody] CreateCategoryRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateCategoryRequest request, CancellationToken token)
         {
             var category = request.MapToCategory();
 
 
-            await _categoryService.CreateAsync(category);
+            await _categoryService.CreateAsync(category, token);
 
             var response = category.MapToResponse();
 
@@ -33,9 +34,9 @@ namespace Snouter.Api.Controllers
 
         [HttpGet]
         [Route(ApiEndpoints.Category.GetAll)]
-        public async Task<IActionResult> GetAll() 
+        public async Task<IActionResult> GetAll(CancellationToken token)
         {
-            var categories = await _categoryService.GetAllAsync();
+            var categories = await _categoryService.GetAllAsync(token);
 
             var response = categories.MapToResponse();
 
@@ -44,9 +45,9 @@ namespace Snouter.Api.Controllers
 
         [HttpGet]
         [Route(ApiEndpoints.Category.Get)]
-        public async Task<IActionResult> Get([FromRoute] Guid id)
+        public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken token)
         {
-            var category = await _categoryService.GetByIdAsync(id);
+            var category = await _categoryService.GetByIdAsync(id, token);
 
             if (category is null)
             {
@@ -60,10 +61,10 @@ namespace Snouter.Api.Controllers
 
         [HttpPut]
         [Route(ApiEndpoints.Category.Update)]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCategoryRequest request)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCategoryRequest request, CancellationToken token)
         {
             var category = request.MapToCategory(id);
-            var updatedCategory = await _categoryService.UpdateAsync(category);
+            var updatedCategory = await _categoryService.UpdateAsync(category, token);
 
             if (updatedCategory is null) 
             {
@@ -77,9 +78,9 @@ namespace Snouter.Api.Controllers
 
         [HttpDelete]
         [Route(ApiEndpoints.Category.Delete)]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
         {
-            var isDeleted = await _categoryService.DeleteByIdAsync(id);
+            var isDeleted = await _categoryService.DeleteByIdAsync(id, token);
             if (!isDeleted)
             {
                 return NotFound();

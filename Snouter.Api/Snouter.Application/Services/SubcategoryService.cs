@@ -26,35 +26,35 @@ namespace Snouter.Application.Services
             _subcategoryValidator = subcategoryValidator;
 
         }
-        public async Task<bool> CreateAsync(Subcategory subcategory)
+        public async Task<bool> CreateAsync(Subcategory subcategory, CancellationToken token = default)
         {
-            await _subcategoryValidator.ValidateAndThrowAsync(subcategory);
-            return await _subcategoryRepository.CreateAsync(subcategory);
+            await _subcategoryValidator.ValidateAndThrowAsync(subcategory, cancellationToken: token);
+            return await _subcategoryRepository.CreateAsync(subcategory, token);
         }
 
-        public Task<bool> DeleteByIdAsync(Guid id)
+        public Task<bool> DeleteByIdAsync(Guid id, CancellationToken token = default)
         {
-            return _subcategoryRepository.DeleteByIdAsync(id);
+            return _subcategoryRepository.DeleteByIdAsync(id, token);
         }
 
-        public Task<IEnumerable<Subcategory>> GetAllAsync()
+        public Task<IEnumerable<Subcategory>> GetAllAsync(CancellationToken token = default)
         {
-            return _subcategoryRepository.GetAllAsync();
+            return _subcategoryRepository.GetAllAsync(token);
         }
 
-        public Task<Subcategory?> GetByIdAsync(Guid id)
+        public Task<Subcategory?> GetByIdAsync(Guid id, CancellationToken token = default)
         {
-            return _subcategoryRepository.GetByIdAsync(id);
+            return _subcategoryRepository.GetByIdAsync(id, token);
         }
 
-        public async Task<Subcategory?> UpdateAsync(Subcategory subcategory)
+        public async Task<Subcategory?> UpdateAsync(Subcategory subcategory, CancellationToken token = default)
         {
-            await _subcategoryValidator.ValidateAndThrowAsync(subcategory);
-            var subcategoryExists = await _subcategoryRepository.ExistsByIdAsync(subcategory.Id);
+            await _subcategoryValidator.ValidateAndThrowAsync(subcategory, cancellationToken: token);
+            var subcategoryExists = await _subcategoryRepository.ExistsByIdAsync(subcategory.Id, token);
             if (!subcategoryExists) { return null; }
 
 
-            await _subcategoryRepository.UpdateAsync(subcategory);
+            await _subcategoryRepository.UpdateAsync(subcategory, token);
             return subcategory;
         }
     }

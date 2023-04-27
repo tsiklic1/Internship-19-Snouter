@@ -9,13 +9,13 @@ namespace Snouter.Application.Repository
 {
     public interface IUserRepository
     {
-        Task<bool> CreateAsync(User user);
-        Task<User?> GetByIdAsync(Guid id);
-        Task<IEnumerable<User>> GetAllAsync();
+        Task<bool> CreateAsync(User user, CancellationToken token = default);
+        Task<User?> GetByIdAsync(Guid id, CancellationToken token = default);
+        Task<IEnumerable<User>> GetAllAsync(CancellationToken token = default);
 
-        Task<bool> UpdateAsync(User user);
-        Task<bool> DeleteByIdAsync(Guid id);
+        Task<bool> UpdateAsync(User user, CancellationToken token = default);
+        Task<bool> DeleteByIdAsync(Guid id, CancellationToken token = default);
 
-        Task<bool> ExistsByIdAsync(Guid id);
+        Task<bool> ExistsByIdAsync(Guid id, CancellationToken token = default);
     }
 }

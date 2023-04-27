@@ -9,11 +9,11 @@ namespace Snouter.Application.Services
 {
     public interface IUserService
     {
-        Task<bool> CreateAsync(User user);
-        Task<User?> GetByIdAsync(Guid id);
-        Task<IEnumerable<User>> GetAllAsync();
+        Task<bool> CreateAsync(User user, CancellationToken token = default);
+        Task<User?> GetByIdAsync(Guid id, CancellationToken token = default);
+        Task<IEnumerable<User>> GetAllAsync(CancellationToken token = default);
 
-        Task<User?> UpdateAsync(User user);
-        Task<bool> DeleteByIdAsync(Guid id);
+        Task<User?> UpdateAsync(User user, CancellationToken token = default);
+        Task<bool> DeleteByIdAsync(Guid id, CancellationToken token = default);
     }
 }

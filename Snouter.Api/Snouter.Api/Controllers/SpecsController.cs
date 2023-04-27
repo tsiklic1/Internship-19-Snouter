@@ -16,12 +16,12 @@ namespace Snouter.Api.Controllers
 
         [HttpPost]
         [Route(ApiEndpoints.Spec.Create)]
-        public async Task<IActionResult> Create([FromBody] CreateSpecRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateSpecRequest request, CancellationToken token)
         {
             var spec = request.MapToSpec();
 
 
-            await _specService.CreateAsync(spec);
+            await _specService.CreateAsync(spec, token);
 
             var response = spec.MapToResponse();
 
@@ -30,9 +30,9 @@ namespace Snouter.Api.Controllers
 
         [HttpGet]
         [Route(ApiEndpoints.Spec.GetAll)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken token)
         {
-            var specs = await _specService.GetAllAsync();
+            var specs = await _specService.GetAllAsync(token);
 
             var response = specs.MapToResponse();
 
@@ -41,9 +41,9 @@ namespace Snouter.Api.Controllers
 
         [HttpGet]
         [Route(ApiEndpoints.Spec.Get)]
-        public async Task<IActionResult> Get([FromRoute] Guid id)
+        public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken token)
         {
-            var spec = await _specService.GetByIdAsync(id);
+            var spec = await _specService.GetByIdAsync(id, token);
 
             if (spec is null)
             {
@@ -57,10 +57,10 @@ namespace Snouter.Api.Controllers
 
         [HttpPut]
         [Route(ApiEndpoints.Spec.Update)]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateSpecRequest request)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateSpecRequest request, CancellationToken token)
         {
             var spec = request.MapToSpec(id);
-            var updatedSpec = await _specService.UpdateAsync(spec);
+            var updatedSpec = await _specService.UpdateAsync(spec, token);
 
             if (updatedSpec is null)
             {
@@ -75,9 +75,9 @@ namespace Snouter.Api.Controllers
 
         [HttpDelete]
         [Route(ApiEndpoints.Spec.Delete)]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
         {
-            var isDeleted = await _specService.DeleteByIdAsync(id);
+            var isDeleted = await _specService.DeleteByIdAsync(id, token);
             if (!isDeleted)
             {
                 return NotFound();
