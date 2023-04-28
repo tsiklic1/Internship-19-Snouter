@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Snouter.Api.Mapping;
 using Snouter.Application.Services;
 using Snouter.Contracts.Requests;
@@ -28,6 +29,7 @@ namespace Snouter.Api.Controllers
             return CreatedAtAction(nameof(Get), new { id = response.Id }, response);
         }
 
+        [Authorize(AuthConstants.AdminUserPolicyName)]
         [HttpGet]
         [Route(ApiEndpoints.User.GetAll)]
         public async Task<IActionResult> GetAll(CancellationToken token)
@@ -38,6 +40,7 @@ namespace Snouter.Api.Controllers
 
             return Ok(response);
         }
+
 
         [HttpGet]
         [Route(ApiEndpoints.User.Get)]
@@ -55,6 +58,7 @@ namespace Snouter.Api.Controllers
             return Ok(response);
         }
 
+        [Authorize(AuthConstants.TrustMemberPolicyName)]
         [HttpPut]
         [Route(ApiEndpoints.User.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateUserRequest request, CancellationToken token)
@@ -72,6 +76,7 @@ namespace Snouter.Api.Controllers
 
         }
 
+        [Authorize(AuthConstants.TrustMemberPolicyName)]
         [HttpDelete]
         [Route(ApiEndpoints.User.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)

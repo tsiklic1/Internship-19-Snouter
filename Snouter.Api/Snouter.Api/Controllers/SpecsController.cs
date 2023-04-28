@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Snouter.Api.Mapping;
 using Snouter.Application.Services;
 using Snouter.Contracts.Requests;
@@ -14,6 +15,7 @@ namespace Snouter.Api.Controllers
             _specService = specService;
         }
 
+        [Authorize(AuthConstants.AdminUserPolicyName)]
         [HttpPost]
         [Route(ApiEndpoints.Spec.Create)]
         public async Task<IActionResult> Create([FromBody] CreateSpecRequest request, CancellationToken token)
@@ -55,6 +57,7 @@ namespace Snouter.Api.Controllers
             return Ok(response);
         }
 
+        [Authorize(AuthConstants.AdminUserPolicyName)]
         [HttpPut]
         [Route(ApiEndpoints.Spec.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateSpecRequest request, CancellationToken token)
@@ -72,7 +75,7 @@ namespace Snouter.Api.Controllers
 
         }
 
-
+        [Authorize(AuthConstants.AdminUserPolicyName)]
         [HttpDelete]
         [Route(ApiEndpoints.Spec.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)

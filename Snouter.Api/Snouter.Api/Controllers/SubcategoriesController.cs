@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Snouter.Api.Mapping;
 using Snouter.Application.Services;
 using Snouter.Contracts.Requests;
@@ -15,9 +16,9 @@ namespace Snouter.Api.Controllers
             _subcategoryService = subcategoryService;
         }
 
+        [Authorize(AuthConstants.AdminUserPolicyName)]
         [HttpPost]
         [Route(ApiEndpoints.Subcategory.Create)]
-
         public async Task<IActionResult> Create([FromBody] CreateSubcategoryRequest request, CancellationToken token)
         {
             var subcategory = request.MapToSubcategory();
@@ -56,7 +57,7 @@ namespace Snouter.Api.Controllers
             return Ok(response);
         }
 
-
+        [Authorize(AuthConstants.AdminUserPolicyName)]
         [HttpPut]
         [Route(ApiEndpoints.Subcategory.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateSubcategoryRequest request, CancellationToken token)
@@ -74,6 +75,7 @@ namespace Snouter.Api.Controllers
 
         }
 
+        [Authorize(AuthConstants.AdminUserPolicyName)]
         [HttpDelete]
         [Route(ApiEndpoints.Subcategory.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)

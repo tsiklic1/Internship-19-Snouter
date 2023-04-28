@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Snouter.Api.Mapping;
 using Snouter.Application.Models;
 using Snouter.Application.Repository;
@@ -18,18 +19,12 @@ namespace Snouter.Api.Controllers
             _productService = productService;
         }
 
+        [Authorize(AuthConstants.TrustMemberPolicyName)]
         [HttpPost]
         [Route(ApiEndpoints.Product.Create)]
         public async Task<IActionResult> Create([FromBody] CreateProductRequest request, CancellationToken token)
         {
             var product = request.MapToProduct();
-
-            //var isCreated = _productService.CreateAsync(product).Result;
-
-            //if (!isCreated)
-            //{
-            //    return BadRequest();
-            //}
 
             await _productService.CreateAsync(product, token);
 
@@ -65,6 +60,7 @@ namespace Snouter.Api.Controllers
             return Ok(response);
         }
 
+        [Authorize(AuthConstants.TrustMemberPolicyName)]
         [HttpDelete]
         [Route(ApiEndpoints.Product.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
@@ -79,7 +75,7 @@ namespace Snouter.Api.Controllers
         }
 
 
-
+        [Authorize(AuthConstants.TrustMemberPolicyName)]
         [HttpPut]
         [Route(ApiEndpoints.Product.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateProductRequest request, CancellationToken token)

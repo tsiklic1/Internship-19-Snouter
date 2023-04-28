@@ -18,6 +18,7 @@ namespace Snouter.Api.Controllers
             _categoryService= categoryService;
         }
 
+        [Authorize(AuthConstants.AdminUserPolicyName)]
         [HttpPost]
         [Route(ApiEndpoints.Category.Create)]
         public async Task<IActionResult> Create([FromBody] CreateCategoryRequest request, CancellationToken token)
@@ -59,6 +60,7 @@ namespace Snouter.Api.Controllers
             return Ok(response);
         }
 
+        [Authorize(AuthConstants.AdminUserPolicyName)]
         [HttpPut]
         [Route(ApiEndpoints.Category.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCategoryRequest request, CancellationToken token)
@@ -76,6 +78,7 @@ namespace Snouter.Api.Controllers
 
         }
 
+        [Authorize(AuthConstants.AdminUserPolicyName)]
         [HttpDelete]
         [Route(ApiEndpoints.Category.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken token)
