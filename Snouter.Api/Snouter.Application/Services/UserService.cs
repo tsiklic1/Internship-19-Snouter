@@ -1,4 +1,5 @@
-﻿using Snouter.Application.Models;
+﻿using FluentValidation;
+using Snouter.Application.Models;
 using Snouter.Application.Repository;
 using System;
 using System.Collections.Generic;
@@ -11,39 +12,42 @@ namespace Snouter.Application.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IValidator<User> _userValidator;
 
-
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IValidator<User> userValidator)
         {
             _userRepository = userRepository;
+            _userValidator = userValidator;
 
         }
-        public Task<bool> CreateAsync(User user)
+        public async Task<bool> CreateAsync(User user, CancellationToken token = default)
         {
-            return _userRepository.CreateAsync(user);
+            await _userValidator.ValidateAndThrowAsync(user, cancellationToken: token);
+            return await _userRepository.CreateAsync(user, token);
         }
 
-        public Task<bool> DeleteByIdAsync(Guid id)
+        public Task<bool> DeleteByIdAsync(Guid id, CancellationToken token = default)
         {
-            return _userRepository.DeleteByIdAsync(id);
+            return _userRepository.DeleteByIdAsync(id, token);
         }
 
-        public Task<IEnumerable<User>> GetAllAsync()
+        public Task<IEnumerable<User>> GetAllAsync(CancellationToken token = default)
         {
-            return _userRepository.GetAllAsync();
+            return _userRepository.GetAllAsync( token);
         }
 
-        public Task<User?> GetByIdAsync(Guid id)
+        public Task<User?> GetByIdAsync(Guid id, CancellationToken token = default)
         {
-            return _userRepository.GetByIdAsync(id);
+            return _userRepository.GetByIdAsync(id, token);
         }
 
-        public async Task<User?> UpdateAsync(User user)
+        public async Task<User?> UpdateAsync(User user, CancellationToken token = default)
         {
-            var userExists = await _userRepository.ExistsByIdAsync(user.Id);
+            await _userValidator.ValidateAndThrowAsync(user, cancellationToken: token);
+            var userExists = await _userRepository.ExistsByIdAsync(user.Id, token);
             if (!userExists) { return null; }
 
-            await _userRepository.UpdateAsync(user);
+            await _userRepository.UpdateAsync(user, token);
             return user;
         }
     }

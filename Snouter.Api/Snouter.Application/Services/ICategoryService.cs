@@ -9,12 +9,12 @@ namespace Snouter.Application.Services
 {
     public interface ICategoryService
     {
-        Task<bool> CreateAsync(Category category);
-        Task<Category?> GetByIdAsync(Guid id);
-        Task<IEnumerable<Category>> GetAllAsync();
+        Task<bool> CreateAsync(Category category, CancellationToken token = default);
+        Task<Category?> GetByIdAsync(Guid id, CancellationToken token = default);
+        Task<IEnumerable<Category>> GetAllAsync( CancellationToken token = default);
 
-        Task<Category?> UpdateAsync(Category category);
-        Task<bool> DeleteByIdAsync(Guid id);
+        Task<Category?> UpdateAsync(Category category, CancellationToken token = default);
+        Task<bool> DeleteByIdAsync(Guid id, CancellationToken token = default);
 
     }
 }

@@ -9,11 +9,11 @@ namespace Snouter.Application.Services
 {
     public interface ISpecService
     {
-        Task<bool> CreateAsync(Spec spec);
-        Task<Spec?> GetByIdAsync(Guid id);
-        Task<IEnumerable<Spec>> GetAllAsync();
+        Task<bool> CreateAsync(Spec spec, CancellationToken token = default);
+        Task<Spec?> GetByIdAsync(Guid id, CancellationToken token = default);
+        Task<IEnumerable<Spec>> GetAllAsync(CancellationToken token = default);
 
-        Task<Spec?> UpdateAsync(Spec spec);
-        Task<bool> DeleteByIdAsync(Guid id);
+        Task<Spec?> UpdateAsync(Spec spec, CancellationToken token = default);
+        Task<bool> DeleteByIdAsync(Guid id, CancellationToken token = default);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Snouter.Application.Models;
+﻿using FluentValidation;
+using Snouter.Application.Models;
 using Snouter.Application.Repository;
 using System;
 using System.Collections.Generic;
@@ -12,35 +13,40 @@ namespace Snouter.Application.Services
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryService(ICategoryRepository categoryRepository)
+        private readonly IValidator<Category> _categoryValidator;
+
+        public CategoryService(ICategoryRepository categoryRepository, IValidator<Category> categoryValidator)
         {
             _categoryRepository = categoryRepository;
+            _categoryValidator = categoryValidator;
         }
-        public Task<bool> CreateAsync(Category category)
+        public async Task<bool> CreateAsync(Category category, CancellationToken token = default)
         {
-            return _categoryRepository.CreateAsync(category);
-        }
-
-        public Task<bool> DeleteByIdAsync(Guid id)
-        {
-            return _categoryRepository.DeleteByIdAsync(id);
+            await _categoryValidator.ValidateAndThrowAsync(category,cancellationToken: token);
+            return await _categoryRepository.CreateAsync(category, token);
         }
 
-        public Task<IEnumerable<Category>> GetAllAsync()
+        public Task<bool> DeleteByIdAsync(Guid id, CancellationToken token = default)
         {
-            return _categoryRepository.GetAllAsync();
+            return _categoryRepository.DeleteByIdAsync(id, token);
         }
 
-        public Task<Category?> GetByIdAsync(Guid id)
+        public Task<IEnumerable<Category>> GetAllAsync(CancellationToken token = default)
         {
-            return _categoryRepository.GetByIdAsync(id);
+            return _categoryRepository.GetAllAsync(token);
         }
 
-        public async Task<Category?> UpdateAsync(Category category)
+        public Task<Category?> GetByIdAsync(Guid id, CancellationToken token = default)
         {
-            var categoryExists = await _categoryRepository.ExistsByIdAsync(category.Id);
+            return _categoryRepository.GetByIdAsync(id, token);
+        }
+
+        public async Task<Category?> UpdateAsync(Category category, CancellationToken token = default)
+        {
+            await _categoryValidator.ValidateAndThrowAsync(category, cancellationToken: token);
+            var categoryExists = await _categoryRepository.ExistsByIdAsync(category.Id, token);
             if (!categoryExists) { return null; }
-            await _categoryRepository.UpdateAsync(category);
+            await _categoryRepository.UpdateAsync(category, token);
             return category;
         }
     }

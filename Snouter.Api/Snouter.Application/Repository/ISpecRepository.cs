@@ -9,13 +9,13 @@ namespace Snouter.Application.Repository
 {
     public interface ISpecRepository
     {
-        Task<bool> CreateAsync(Spec spec);
-        Task<Spec?> GetByIdAsync(Guid id);
-        Task<IEnumerable<Spec>> GetAllAsync();
+        Task<bool> CreateAsync(Spec spec, CancellationToken token = default);
+        Task<Spec?> GetByIdAsync(Guid id, CancellationToken token = default);
+        Task<IEnumerable<Spec>> GetAllAsync(CancellationToken token = default);
 
-        Task<bool> UpdateAsync(Spec spec);
-        Task<bool> DeleteByIdAsync(Guid id);
+        Task<bool> UpdateAsync(Spec spec, CancellationToken token = default);
+        Task<bool> DeleteByIdAsync(Guid id, CancellationToken token = default);
 
-        Task<bool> ExistsByIdAsync(Guid id);
+        Task<bool> ExistsByIdAsync(Guid id, CancellationToken token = default);
     }
 }

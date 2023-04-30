@@ -9,13 +9,13 @@ namespace Snouter.Application.Repository
 {
     public interface ICategoryRepository
     {
-        Task<bool> CreateAsync(Category category);
-        Task<Category?> GetByIdAsync(Guid id);
-        Task<IEnumerable<Category>> GetAllAsync();
+        Task<bool> CreateAsync(Category category, CancellationToken token = default);
+        Task<Category?> GetByIdAsync(Guid id, CancellationToken token = default);
+        Task<IEnumerable<Category>> GetAllAsync( CancellationToken token = default);
 
-        Task<bool> UpdateAsync(Category category);
-        Task<bool> DeleteByIdAsync(Guid id);
+        Task<bool> UpdateAsync(Category category, CancellationToken token = default);
+        Task<bool> DeleteByIdAsync(Guid id, CancellationToken token = default);
 
-        Task<bool> ExistsByIdAsync(Guid id);
+        Task<bool> ExistsByIdAsync(Guid id, CancellationToken token = default);
     }
 }

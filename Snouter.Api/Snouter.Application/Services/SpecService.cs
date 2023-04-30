@@ -1,4 +1,5 @@
-﻿using Snouter.Application.Models;
+﻿using FluentValidation;
+using Snouter.Application.Models;
 using Snouter.Application.Repository;
 using System;
 using System.Collections.Generic;
@@ -13,42 +14,49 @@ namespace Snouter.Application.Services
         private readonly ISpecRepository _specRepository;
 
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IValidator<Spec> _specValidator;
 
-        public SpecService(ISpecRepository specRepository, ICategoryRepository categoryRepository)
+        public SpecService(ISpecRepository specRepository,
+            ICategoryRepository categoryRepository,
+            IValidator<Spec> specValidator)
         {
             _specRepository = specRepository;
             _categoryRepository = categoryRepository;
+            _specValidator = specValidator;
 
         }
-        public Task<bool> CreateAsync(Spec spec)
+        public async Task<bool> CreateAsync(Spec spec, CancellationToken token = default)
         {
-            return _specRepository.CreateAsync(spec);
+            await _specValidator.ValidateAndThrowAsync(spec, cancellationToken: token);
+            return await _specRepository.CreateAsync(spec, token);
         }
 
-        public Task<bool> DeleteByIdAsync(Guid id)
+        public Task<bool> DeleteByIdAsync(Guid id, CancellationToken token = default)
         {
-            return _specRepository.DeleteByIdAsync(id);
+            return _specRepository.DeleteByIdAsync(id, token);
         }
 
-        public Task<IEnumerable<Spec>> GetAllAsync()
+        public Task<IEnumerable<Spec>> GetAllAsync(CancellationToken token = default)
         {
-            return _specRepository.GetAllAsync();
+            return _specRepository.GetAllAsync(token);
         }
 
-        public Task<Spec?> GetByIdAsync(Guid id)
+        public Task<Spec?> GetByIdAsync(Guid id, CancellationToken token = default)
         {
-            return _specRepository.GetByIdAsync(id);
+            return _specRepository.GetByIdAsync(id, token);
         }
 
-        public async Task<Spec?> UpdateAsync(Spec spec)
+        public async Task<Spec?> UpdateAsync(Spec spec, CancellationToken token = default)
         {
-            var categoryExists = await _categoryRepository.ExistsByIdAsync(spec.CategoryId);
-            if (!categoryExists) { return null; }
+            //var categoryExists = await _categoryRepository.ExistsByIdAsync(spec.CategoryId);
+            //if (!categoryExists) { return null; }
 
-            var specExists = await _specRepository.ExistsByIdAsync(spec.Id);
+            await _specValidator.ValidateAndThrowAsync(spec, cancellationToken: token);
+
+            var specExists = await _specRepository.ExistsByIdAsync(spec.Id, token);
             if (!specExists) { return null; }
 
-            await _specRepository.UpdateAsync(spec);
+            await _specRepository.UpdateAsync(spec, token);
             return spec;
         }
     }
